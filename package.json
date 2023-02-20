@@ -11,7 +11,7 @@
   "author": "@rmrk-team",
   "license": "Apache-2.0",
   "dependencies": {
-    "@rmrk-team/evm-contracts": "^0.24.1"
+    "@rmrk-team/evm-contracts": "^0.26.0"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
@@ -43,7 +43,7 @@
     "hardhat-gas-reporter": "^1.0.9",
     "prettier": "2.8.0",
     "prettier-plugin-solidity": "^1.0.0",
-    "solc": "^0.8.17",
+    "solc": "^0.8.18",
     "solhint": "^3.3.7",
     "solidity-coverage": "^0.8.2",
     "ts-node": "^10.9.1",
