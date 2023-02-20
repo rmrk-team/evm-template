@@ -8,8 +8,10 @@ temp
 .idea
 
 #Hardhat files
-cache
 artifacts
+artifacts-zk
+cache
+cache-zk
 
 #sec notes
 sec-review.md

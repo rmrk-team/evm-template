@@ -1,14 +1,21 @@
 import * as dotenv from 'dotenv';
-import { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-toolbox';
 import '@typechain/hardhat';
+import 'hardhat-contract-sizer';
 import 'hardhat-gas-reporter';
 import 'solidity-coverage';
-import 'hardhat-contract-sizer';
+import '@matterlabs/hardhat-zksync-deploy';
+import '@matterlabs/hardhat-zksync-solc';
+import '@matterlabs/hardhat-zksync-verify';
 
 dotenv.config();
 
-const config: HardhatUserConfig = {
+module.exports = {
+  zksolc: {
+    version: '1.3.5',
+    compilerSource: 'binary',
+    settings: {},
+  },
   solidity: {
     version: '0.8.18',
     settings: {
@@ -19,6 +26,12 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
+    zkSyncTestnet: {
+      url: 'https://zksync2-testnet.zksync.dev',
+      ethNetwork: 'goerli', // Can also be the RPC URL of the network (e.g. `https://goerli.infura.io/v3/<API_KEY>`)
+      zksync: true,
+      verifyURL: 'https://zksync2-testnet-explorer.zksync.dev/contract_verification',
+    },
     goerli: {
       url: process.env.GOERLI_URL || '',
       chainId: 5,
@@ -49,5 +62,3 @@ const config: HardhatUserConfig = {
     },
   },
 };
-
-export default config;

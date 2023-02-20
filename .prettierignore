@@ -1,7 +1,9 @@
 node_modules
 artifacts
+artifacts-zk
 docs
 typechain-types
 cache
+cache-zk
 coverage*
 gasReporterOutput.json
