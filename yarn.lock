@@ -886,10 +886,10 @@
   dependencies:
     squirrelly "^8.0.8"
 
-"@rmrk-team/evm-contracts@^0.30.0":
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-0.30.0.tgz#a8a0aae296a3f67061d21730c1f11b3a38440971"
-  integrity sha512-6tqCRDJhZKsCEYlibQ8NRUXL3ETC7ALOzJWDcQPWjweLlBtw85yzLYH+oa0HEPgS2Z6Ksl+KFjMTbkgFk3+l5w==
+"@rmrk-team/evm-contracts@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-1.1.0.tgz#595d65cf82bdaa314b7630f0a7b6f300dc892561"
+  integrity sha512-vQH3B3P9q44/rbR5p9tMAaOyYgqvEmM/dbDqskIflsxYwAq7vpnCCxisKKHOhKd6WcFqfImsQCOinkPnXB2qNQ==
   dependencies:
     "@openzeppelin/contracts" "^4.6.0"
 

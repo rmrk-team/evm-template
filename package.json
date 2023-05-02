@@ -11,7 +11,7 @@
   "author": "@rmrk-team",
   "license": "Apache-2.0",
   "dependencies": {
-    "@rmrk-team/evm-contracts": "^0.30.0"
+    "@rmrk-team/evm-contracts": "^1.1.0"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.1",
