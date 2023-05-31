@@ -28,6 +28,7 @@ const config: HardhatUserConfig = {
       url: 'https://rpc.testnet.moonbeam.network',
       chainId: 1287, // (hex: 0x507)
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      gasPrice: 1000000000,
     },
     moonriver: {
       url: 'https://rpc.api.moonriver.moonbeam.network',
@@ -39,6 +40,13 @@ const config: HardhatUserConfig = {
       chainId: 1284, // (hex: 0x504),
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+  },
+  gasReporter: {
+    enabled: process.env.REPORT_GAS !== undefined,
+    currency: 'USD',
+    coinmarketcap: process.env.COIN_MARKET_CAP_KEY || '',
+    token: 'GLMR',
+    gasPriceApi: 'https://api-moonbeam.moonscan.io/api?module=proxy&action=eth_gasPrice',
   },
   etherscan: {
     apiKey: {
