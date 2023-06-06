@@ -919,10 +919,10 @@
     web3 "^1.2.5"
     web3-utils "^1.2.5"
 
-"@rmrk-team/evm-contracts@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-1.2.0.tgz#1180efd6208852a791f2ce393bc1e41fbaa6acde"
-  integrity sha512-DVoQ3WiUReaX3GA097CLBNNq7MngkIfsHxE+pZl/KAY3tBXvYlI1naB9igmCfDBuNft3kMNYZxBhZO4QN5SVSg==
+"@rmrk-team/evm-contracts@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-1.2.1.tgz#5397958eb83b2d8cfebc88138811c65a90770ae5"
+  integrity sha512-jFElzC/B3VHDbvidNhAJkAOYUGXbm288zFOVM5OUyLZFcagipBZawwz2pb40XMM4HVVsw/BVUSd+L/fOWXWvpw==
   dependencies:
     "@openzeppelin/contracts" "^4.6.0"
 
