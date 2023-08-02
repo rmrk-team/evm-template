@@ -3,14 +3,12 @@ import { expect } from 'chai';
 import { BigNumber } from 'ethers';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { SimpleEquippable } from '../typechain-types';
-import { IRMRKInitData } from '../typechain-types/contracts/SimpleEquippable';
+import { InitDataNativePay } from '../typechain-types/contracts/SimpleEquippable';
 
 async function fixture(): Promise<SimpleEquippable> {
   const equipFactory = await ethers.getContractFactory('SimpleEquippable');
 
-  const initData: IRMRKInitData.InitDataStruct = {
-    erc20TokenAddress: ethers.constants.AddressZero,
-    tokenUriIsEnumerable: false,
+  const initData: InitDataNativePay.InitDataStruct = {
     royaltyRecipient: ethers.constants.AddressZero,
     royaltyPercentageBps: 1000,
     maxSupply: BigNumber.from(1000),
