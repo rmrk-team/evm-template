@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.21;
 
-import "@rmrk-team/evm-contracts/contracts/implementations/nativeTokenPay/RMRKEquippableImpl.sol";
+import "@rmrk-team/evm-contracts/contracts/implementations/lazyMintNative/RMRKEquippableLazyMintNative.sol";
 
-contract SimpleEquippable is RMRKEquippableImpl {
+contract SimpleEquippable is RMRKEquippableLazyMintNative {
     constructor(
-        string memory name_,
-        string memory symbol_,
-        string memory collectionMetadata_,
-        string memory tokenURI_,
+        string memory name,
+        string memory symbol,
+        string memory collectionMetadata,
+        string memory baseTokenURI,
         InitData memory data
     )
-        RMRKEquippableImpl(name_, symbol_, collectionMetadata_, tokenURI_, data)
+        RMRKEquippableLazyMintNative(name, symbol, collectionMetadata, baseTokenURI, data)
     {}
 }
