@@ -2,6 +2,7 @@ import { ethers } from 'hardhat';
 import { BigNumber } from 'ethers';
 import { SimpleEquippable } from '../typechain-types';
 import { InitDataNativePay } from '../typechain-types/contracts/SimpleEquippable';
+import { getRegistry } from './getRegistry';
 
 async function main() {
   await deployContracts();
@@ -28,6 +29,10 @@ async function deployContracts(): Promise<void> {
 
   await kanaria.deployed();
   console.log(`Sample contracts deployed to ${kanaria.address}.`);
+
+  // Only do on testing, or if whitelisted for production
+  const registry = await getRegistry();
+  await registry.addExternalCollection(kanaria.address, 'ipfs://collectionMeta');
 }
 
 main().catch((error) => {
