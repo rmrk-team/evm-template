@@ -30,5 +30,8 @@ async function getRegistryAddress(): Promise<string> {
   else if (chainId === 84531)
     // Base Goerli
     return '0x0FB4A16AB622bd7BD9D3046d4C3c92C254f42beF';
+  else if (chainId === 8453)
+      // Base
+      return '0xcb79fF273170863B74eB126303Cf1E4a61f68fAE'
   else throw new Error('Unexpected network!');
 }
