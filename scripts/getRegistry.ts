@@ -31,7 +31,13 @@ async function getRegistryAddress(): Promise<string> {
     // Base Goerli
     return '0x0FB4A16AB622bd7BD9D3046d4C3c92C254f42beF';
   else if (chainId === 8453)
-      // Base
-      return '0xcb79fF273170863B74eB126303Cf1E4a61f68fAE'
+    // Base
+    return '0xcb79fF273170863B74eB126303Cf1E4a61f68fAE';
+  else if (chainId === 81)
+    // Shibuya
+    return '0xAEc04D22642F66109AF79E6b5ED4876193568999';
+  else if (chainId === 592)
+    // Astar
+    return '0x96FB7Eb4419FccF7fD97Fc6E39Ee1f0541c12508';
   else throw new Error('Unexpected network!');
 }
