@@ -44,17 +44,17 @@ export default async function (hre: HardhatRuntimeEnvironment) {
   const parsedFee = ethers.utils.formatEther(deploymentFee.toString());
   console.log(`The deployment is estimated to cost ${parsedFee} ETH`);
 
-  const kanaria = <SimpleEquippable>await deployer.deploy(artifact, args);
+  const contract = <SimpleEquippable>await deployer.deploy(artifact, args);
 
-  await kanaria.deployed();
-  console.log(`Sample contracts deployed to ${kanaria.address}.`);
+  await contract.deployed();
+  console.log(`Sample contracts deployed to ${contract.address}.`);
 
-  await delay(20000);
-  console.log('Will verify now');
-
-  await run(`verify:verify`, {
-    address: kanaria.address,
-    constructorArguments: args,
-    contract: 'contracts/SimpleEquippable.sol:SimpleEquippable',
-  });
+  // Verify script is currently broken. Reported here: https://github.com/zkSync-Community-Hub/zkync-developers/discussions/164 and https://github.com/matter-labs/hardhat-zksync/issues/404
+  // await delay(20000);
+  // console.log('Will verify now');
+  // await run(`verify:verify`, {
+  //   address: kanaria.address,
+  //   constructorArguments: args,
+  //   contract: 'contracts/SimpleEquippable.sol:SimpleEquippable',
+  // });
 }

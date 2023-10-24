@@ -11,6 +11,12 @@ contract SimpleEquippable is RMRKEquippableLazyMintNative {
         string memory baseTokenURI,
         InitData memory data
     )
-        RMRKEquippableLazyMintNative(name, symbol, collectionMetadata, baseTokenURI, data)
+        RMRKEquippableLazyMintNative(
+            name,
+            symbol,
+            collectionMetadata,
+            baseTokenURI,
+            data
+        )
     {}
 }

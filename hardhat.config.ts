@@ -1,18 +1,18 @@
 import * as dotenv from 'dotenv';
 import '@nomicfoundation/hardhat-toolbox';
 import '@typechain/hardhat';
-// import 'hardhat-contract-sizer';
-// import 'hardhat-gas-reporter';
-// import 'solidity-coverage';
+import 'hardhat-contract-sizer';
+import 'hardhat-gas-reporter';
+import 'solidity-coverage';
+// import '@matterlabs/hardhat-zksync-verify';
 import '@matterlabs/hardhat-zksync-deploy';
 import '@matterlabs/hardhat-zksync-solc';
-import '@matterlabs/hardhat-zksync-verify';
 
 dotenv.config();
 
 module.exports = {
   zksolc: {
-    version: '1.3.13',
+    version: '1.3.15',
     compilerSource: 'binary',
     settings: {},
   },
