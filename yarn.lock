@@ -901,10 +901,10 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@rmrk-team/evm-contracts@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-2.1.0.tgz#5faaa61bc242b1ec42bd09938fb2eafcb22da1eb"
-  integrity sha512-ICiFrK55HYFd7fBr8/ujlocvNpNBdf/GKyH9Vv11sRuFhUA/pAac8trh/q58wsQtsPG1M3XI9N8/nCRyYFDnag==
+"@rmrk-team/evm-contracts@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-2.2.0.tgz#26bd2ab3a306235d46b32eea5446fd1e60f56274"
+  integrity sha512-QTgrXxs+WpAzMI1N0VX6mtaJ8aCbtLTcAuWRdMdcGSo/tNdrHokBhcf+BDxfKw8pMrIl3LImKmTZ0/NXeLi5/A==
   dependencies:
     "@openzeppelin/contracts" "^4.6.0"
 
