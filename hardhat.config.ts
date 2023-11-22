@@ -80,6 +80,12 @@ const config: HardhatUserConfig = {
       chainId: 592,
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    bsc: {
+      url: process.env.BSC_URL || 'https://bsc-dataseed.bnbchain.org',
+      chainId: 56,
+      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      gasPrice: 3000000000,
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
@@ -94,12 +100,14 @@ const config: HardhatUserConfig = {
       polygonMumbai: process.env.POLYGONSCAN_API_KEY || '', // Polygon Mumbai Etherscan API Key
       baseGoerli: process.env.BASESCAN_API_KEY || '', // Base Goerli Etherscan API Key
       shibuya: process.env.SHIBUYA_BLOCKSCOUT_API_KEY || '', // Shibuya blockscout API KeyT
+      zkatana: process.env.ZKATANA_BLOCKSCOUT_API_KEY || '', // ZKatana blockscout API Key
       moonriver: process.env.MOONSCAN_APIKEY || '', // Moonriver Moonscan API Key
       moonbeam: process.env.MOONSCAN_APIKEY || '', // Moonbeam Moonscan API Key
       mainnet: process.env.ETHERSCAN_API_KEY || '', // Ethereum Etherscan API Key
       polygon: process.env.POLYGONSCAN_API_KEY || '', // Polygon Etherscan API Key
       base: process.env.BASESCAN_API_KEY || '', // Base Etherscan API Key
-      astar: process.env.ASTAR_BLOCKSCOUT_API_KEY || '', // Astar blockscout API KeyT
+      astar: process.env.ASTAR_BLOCKSCOUT_API_KEY || '', // Astar blockscout API Key
+      bsc: process.env.BSCSCAN_API_KEY || '', // BSC Etherscan API Key
     },
     customChains: [
       {
