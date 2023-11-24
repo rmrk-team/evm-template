@@ -39,5 +39,8 @@ async function getRegistryAddress(): Promise<string> {
   else if (chainId === 592)
     // Astar
     return '0x96FB7Eb4419FccF7fD97Fc6E39Ee1f0541c12508';
+  else if (chainId === 56)
+    // BSC
+    return '0x415aEcB40E26Cda3D3Db8b475F56198A994501ea';
   else throw new Error('Unexpected network!');
 }
