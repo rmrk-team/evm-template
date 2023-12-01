@@ -8,10 +8,7 @@ import 'hardhat-contract-sizer';
 
 dotenv.config();
 
-const accounts =
-  process.env.PRIVATE_KEY_MASTER !== undefined && process.env.PRIVATE_KEY_ALICE
-    ? [process.env.PRIVATE_KEY_MASTER, process.env.PRIVATE_KEY_ALICE]
-    : [];
+const accounts = process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [];
 
 const config: HardhatUserConfig = {
   solidity: {
