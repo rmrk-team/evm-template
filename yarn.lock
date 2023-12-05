@@ -868,10 +868,10 @@
     find-up "^4.1.0"
     fs-extra "^8.1.0"
 
-"@openzeppelin/contracts@^4.6.0":
-  version "4.8.3"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.8.3.tgz#cbef3146bfc570849405f59cba18235da95a252a"
-  integrity sha512-bQHV8R9Me8IaJoJ2vPG4rXcL7seB7YVuskr4f+f5RyOStSZetwzkWtoqDMl5erkBJy0lDRUnIR2WIkPiC0GJlg==
+"@openzeppelin/contracts@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-5.0.0.tgz#ee0e4b4564f101a5c4ee398cd4d73c0bd92b289c"
+  integrity sha512-bv2sdS6LKqVVMLI5+zqnNrNU/CA+6z6CmwFXm/MzmOPBRSO5reEJN7z0Gbzvs0/bv/MZZXNklubpwy3v2+azsw==
 
 "@openzeppelin/test-helpers@^0.5.16":
   version "0.5.16"
@@ -901,12 +901,12 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@rmrk-team/evm-contracts@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-2.2.0.tgz#26bd2ab3a306235d46b32eea5446fd1e60f56274"
-  integrity sha512-QTgrXxs+WpAzMI1N0VX6mtaJ8aCbtLTcAuWRdMdcGSo/tNdrHokBhcf+BDxfKw8pMrIl3LImKmTZ0/NXeLi5/A==
+"@rmrk-team/evm-contracts@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-2.3.1.tgz#388727b1fc7711781b381177f9e7661c4c4581c2"
+  integrity sha512-qvGb9oYhT5W4wQp5BlDbUe8Cl+eQ4Rn17MVNXt6Qy8lXuvRenYrAwGZKu92ZWIpHV0KQPNFk0RdPSxYNBRwTAA==
   dependencies:
-    "@openzeppelin/contracts" "^4.6.0"
+    "@openzeppelin/contracts" "^5.0.0"
 
 "@scure/base@~1.1.0":
   version "1.1.1"
