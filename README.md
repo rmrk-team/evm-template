@@ -14,3 +14,11 @@
    ```
 
 Remember to give credit to RMRK if you're using it's technology. Check the license and notice for more details.
+
+
+## Usig hardhat-deploy
+
+1. Create deployment scripts on `deploy/`
+2. Run deployments via `yarn hardhat deploy --network moonbaseAlpha --tags kanaria --export frontend_data.json`
+3. Set the registry using `yarn hardhat run scripts/setRegistry.ts --network moonbaseAlpha`
+4. Start a dev node deploying only the kanaria `yarn hardhat node --tags kanaria`
