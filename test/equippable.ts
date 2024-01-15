@@ -1,6 +1,5 @@
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
-import { BigNumber } from 'ethers';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { SimpleEquippable } from '../typechain-types';
 import { InitDataNativePay } from '../typechain-types/contracts/SimpleEquippable';
@@ -9,10 +8,10 @@ async function fixture(): Promise<SimpleEquippable> {
   const equipFactory = await ethers.getContractFactory('SimpleEquippable');
 
   const initData: InitDataNativePay.InitDataStruct = {
-    royaltyRecipient: ethers.constants.AddressZero,
+    royaltyRecipient: ethers.ZeroAddress,
     royaltyPercentageBps: 1000,
-    maxSupply: BigNumber.from(1000),
-    pricePerMint: ethers.utils.parseEther('1.0'),
+    maxSupply: 1000n,
+    pricePerMint: ethers.parseEther('1.0'),
   };
 
   const equip: SimpleEquippable = await equipFactory.deploy(
@@ -22,7 +21,7 @@ async function fixture(): Promise<SimpleEquippable> {
     'ipfs://tokenMeta',
     initData,
   );
-  await equip.deployed();
+  await equip.waitForDeployment();
 
   return equip;
 }

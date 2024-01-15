@@ -1,5 +1,4 @@
 import { ethers } from 'hardhat';
-import { BigNumber } from 'ethers';
 import { SimpleEquippable } from '../typechain-types';
 import { InitDataNativePay } from '../typechain-types/contracts/SimpleEquippable';
 import { getRegistry } from './getRegistry';
@@ -13,13 +12,13 @@ async function deployContracts(): Promise<void> {
 
   const contractFactory = await ethers.getContractFactory('SimpleEquippable');
   const initData: InitDataNativePay.InitDataStruct = {
-    royaltyRecipient: ethers.constants.AddressZero,
+    royaltyRecipient: ethers.ZeroAddress,
     royaltyPercentageBps: 1000,
-    maxSupply: BigNumber.from(1000),
-    pricePerMint: ethers.utils.parseEther('1.0'),
+    maxSupply: 1000n,
+    pricePerMint: ethers.parseEther('1.0'),
   };
 
-  const kanaria: SimpleEquippable = await contractFactory.deploy(
+  const contract: SimpleEquippable = await contractFactory.deploy(
     'Kanaria',
     'KAN',
     'ipfs://collectionMeta',
@@ -27,12 +26,12 @@ async function deployContracts(): Promise<void> {
     initData,
   );
 
-  await kanaria.deployed();
-  console.log(`Sample contracts deployed to ${kanaria.address}.`);
+  await contract.waitForDeployment();
+  console.log(`Sample contracts deployed to ${await contract.getAddress()}.`);
 
   // Only do on testing, or if whitelisted for production
   const registry = await getRegistry();
-  await registry.addExternalCollection(kanaria.address, 'ipfs://collectionMeta');
+  await registry.addExternalCollection(await contract.getAddress(), 'ipfs://collectionMeta');
 }
 
 main().catch((error) => {

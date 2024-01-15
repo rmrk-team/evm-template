@@ -4,11 +4,11 @@ import { MockRMRKRegistry } from '../typechain-types';
 export async function getRegistry(): Promise<MockRMRKRegistry> {
   const registryAddress = await getRegistryAddress();
   const contractFactory = await ethers.getContractFactory('MockRMRKRegistry');
-  return <MockRMRKRegistry>await contractFactory.attach(registryAddress);
+  return <MockRMRKRegistry>contractFactory.attach(registryAddress);
 }
 
 async function getRegistryAddress(): Promise<string> {
-  const chainId = await ethers.provider.getNetwork().then((network) => network.chainId);
+  const chainId = Number(await ethers.provider.getNetwork().then((network) => network.chainId));
   if (chainId === 1287)
     // Moonbase Alpha or Hardhat
     return '0xCEd0e87a29A2570A5866f4a4F3e45fA1dd82FD53';
@@ -27,9 +27,9 @@ async function getRegistryAddress(): Promise<string> {
   else if (chainId === 137)
     // Polygon
     return '0x6FF2297d733896cB3bF0432D8Cb829570233bD04';
-  else if (chainId === 84531)
-    // Base Goerli
-    return '0x0FB4A16AB622bd7BD9D3046d4C3c92C254f42beF';
+  else if (chainId === 84532)
+    // Base Sepolia
+    return '0xAB79599164Df5E354eeDDf8B07eC215D3aBf3FAc';
   else if (chainId === 8453)
     // Base
     return '0xcb79fF273170863B74eB126303Cf1E4a61f68fAE';
