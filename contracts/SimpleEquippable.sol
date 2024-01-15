@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pragma solidity ^0.8.21;
-import "@rmrk-team/evm-contracts/contracts/implementations/lazyMintNative/RMRKEquippableLazyMintNative.sol";
+
+import {RMRKEquippableLazyMintNative} from "@rmrk-team/evm-contracts/contracts/implementations/lazyMintNative/RMRKEquippableLazyMintNative.sol";
 
 contract SimpleEquippable is RMRKEquippableLazyMintNative {
     constructor(
