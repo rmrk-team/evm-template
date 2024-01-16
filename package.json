@@ -14,28 +14,5 @@
     "@rmrk-team/evm-contracts": "^2.4.0"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-chai-matchers": "^2.0.3",
-    "@nomicfoundation/hardhat-ethers": "^3.0.5",
-    "@nomicfoundation/hardhat-network-helpers": "^1.0.10",
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "@nomicfoundation/hardhat-verify": "^2.0.3",
-    "@openzeppelin/contracts": "^5.0.0",
-    "@primitivefi/hardhat-dodoc": "^0.2.3",
-    "@typechain/ethers-v6": "^0.5.1",
-    "@typechain/hardhat": "^9.1.0",
-    "@types/chai": "^4.3.11",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.10.8",
-    "chai": "^4.2.0",
-    "dotenv": "^16.3.1",
-    "ethers": "^6.9.2",
-    "hardhat": "^2.19.4",
-    "hardhat-contract-sizer": "^2.10.0",
-    "hardhat-gas-reporter": "^1.0.9",
-    "solidity-coverage": "^0.8.6-sha1.0",
-    "squirrelly": "^8.0.8",
-    "ts-node": "^11.0.0-beta.1",
-    "typechain": "^8.3.2",
-    "typescript": "^5.3.3"
   }
 }

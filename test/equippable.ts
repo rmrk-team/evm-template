@@ -15,8 +15,6 @@ async function fixture(): Promise<SimpleEquippable> {
   };
 
   const equip: SimpleEquippable = await equipFactory.deploy(
-    'Kanaria',
-    'KAN',
     'ipfs://collectionMeta',
     'ipfs://tokenMeta',
     initData,
@@ -34,8 +32,8 @@ describe('SimpleEquippable Assets', async () => {
 
   describe('Init', async function () {
     it('can get names and symbols', async function () {
-      expect(await equip.name()).to.equal('Kanaria');
-      expect(await equip.symbol()).to.equal('KAN');
+      expect(await equip.name()).to.equal('SimpleEquippable');
+      expect(await equip.symbol()).to.equal('SE');
     });
   });
 });
