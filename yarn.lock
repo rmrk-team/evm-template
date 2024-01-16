@@ -731,10 +731,10 @@
   dependencies:
     squirrelly "^8.0.8"
 
-"@rmrk-team/evm-contracts@^2.4.1":
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-2.4.1.tgz#815cc798f85981e60d862484630d99d0041ae24e"
-  integrity sha512-uQdmiec6oO49LYmYy4P4XaaprjY0t6S5xV75JnZb1+EP/i6Ykkd2M/vUIb8sA0zDR7GL8f91iVZvsoq+vsCUUA==
+"@rmrk-team/evm-contracts@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-2.4.2.tgz#70b4f96cb3236538bf65eb07e66adc54a506dc5e"
+  integrity sha512-F8MYD/4k0Gg94Iw4rCFbGWI+zY2R5j/BsFTAIaJWAsaLNlryEErFXm7mHHo8Nl6wybxbfdtwk3OUhIwmVy8bBA==
   dependencies:
     "@nomicfoundation/hardhat-chai-matchers" "^2.0.3"
     "@nomicfoundation/hardhat-ethers" "^3.0.5"
