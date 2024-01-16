@@ -11,8 +11,7 @@
   "author": "@rmrk-team",
   "license": "Apache-2.0",
   "dependencies": {
-    "@rmrk-team/evm-contracts": "^2.4.0"
+    "@rmrk-team/evm-contracts": "^2.4.1"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

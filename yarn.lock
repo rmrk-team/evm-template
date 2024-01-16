@@ -719,22 +719,6 @@
     "@nomicfoundation/solidity-analyzer-win32-ia32-msvc" "0.1.1"
     "@nomicfoundation/solidity-analyzer-win32-x64-msvc" "0.1.1"
 
-"@nomiclabs/hardhat-etherscan@^3.1.8":
-  version "3.1.8"
-  resolved "https://registry.yarnpkg.com/@nomiclabs/hardhat-etherscan/-/hardhat-etherscan-3.1.8.tgz#3c12ee90b3733e0775e05111146ef9418d4f5a38"
-  integrity sha512-v5F6IzQhrsjHh6kQz4uNrym49brK9K5bYCq2zQZ729RYRaifI9hHbtmK+KkIVevfhut7huQFEQ77JLRMAzWYjQ==
-  dependencies:
-    "@ethersproject/abi" "^5.1.2"
-    "@ethersproject/address" "^5.0.2"
-    cbor "^8.1.0"
-    chalk "^2.4.2"
-    debug "^4.1.1"
-    fs-extra "^7.0.1"
-    lodash "^4.17.11"
-    semver "^6.3.0"
-    table "^6.8.0"
-    undici "^5.14.0"
-
 "@openzeppelin/contracts@^5.0.0":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-5.0.1.tgz#93da90fc209a0a4ff09c1deb037fbb35e4020890"
@@ -747,17 +731,16 @@
   dependencies:
     squirrelly "^8.0.8"
 
-"@rmrk-team/evm-contracts@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-2.4.0.tgz#0a330d9933d00a0a44c1fbc10e9de8337977566c"
-  integrity sha512-IR6tw3y/A4PKWpidZ+hqYm8sQvDWOPuIn09OMC4CiyW665n9mBa8lltxRlevzJufnByM6rOO752A4ag9d+heMQ==
+"@rmrk-team/evm-contracts@^2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@rmrk-team/evm-contracts/-/evm-contracts-2.4.1.tgz#815cc798f85981e60d862484630d99d0041ae24e"
+  integrity sha512-uQdmiec6oO49LYmYy4P4XaaprjY0t6S5xV75JnZb1+EP/i6Ykkd2M/vUIb8sA0zDR7GL8f91iVZvsoq+vsCUUA==
   dependencies:
     "@nomicfoundation/hardhat-chai-matchers" "^2.0.3"
     "@nomicfoundation/hardhat-ethers" "^3.0.5"
     "@nomicfoundation/hardhat-network-helpers" "^1.0.10"
     "@nomicfoundation/hardhat-toolbox" "^4.0.0"
     "@nomicfoundation/hardhat-verify" "^2.0.3"
-    "@nomiclabs/hardhat-etherscan" "^3.1.8"
     "@openzeppelin/contracts" "^5.0.0"
     "@primitivefi/hardhat-dodoc" "^0.2.3"
     "@typechain/ethers-v6" "^0.5.1"
