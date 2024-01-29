@@ -1,4 +1,5 @@
-import { ethers, run } from 'hardhat';
+import { ethers, run, network } from 'hardhat';
+import { delay } from './utils';
 
 async function main() {
   const [deployer] = await ethers.getSigners();
@@ -7,37 +8,39 @@ async function main() {
   const bulkwriterFactory = await ethers.getContractFactory('RMRKBulkWriter');
   const bulkwriter = await bulkwriterFactory.deploy();
   await bulkwriter.waitForDeployment();
-  console.log('Bulk Writer deployed to:', await bulkwriter.getAddress());
+  const bulkwriterAddress = await bulkwriter.getAddress();
+  console.log('Bulk Writer deployed to:', bulkwriterAddress);
 
   const catalogUtilsFactory = await ethers.getContractFactory('RMRKCatalogUtils');
   const catalogUtils = await catalogUtilsFactory.deploy();
   await catalogUtils.waitForDeployment();
-  console.log('Catalog Utils deployed to:', await catalogUtils.getAddress());
+  const catalogUtilsAddress = await catalogUtils.getAddress();
+  console.log('Catalog Utils deployed to:', catalogUtilsAddress);
 
   const collectionUtilsFactory = await ethers.getContractFactory('RMRKCollectionUtils');
   const collectionUtils = await collectionUtilsFactory.deploy();
   await collectionUtils.waitForDeployment();
-  console.log('Collection Utils deployed to:', await collectionUtils.getAddress());
+  const collectionUtilsAddress = await collectionUtils.getAddress();
+  console.log('Collection Utils deployed to:', collectionUtilsAddress);
 
   const renderUtilsFactory = await ethers.getContractFactory('RMRKEquipRenderUtils');
   const renderUtils = await renderUtilsFactory.deploy();
   await renderUtils.waitForDeployment();
-  console.log('Equip Render Utils deployed to:', await renderUtils.getAddress());
+  const renderUtilsAddress = await renderUtils.getAddress();
+  console.log('Equip Render Utils deployed to:', renderUtilsAddress);
 
-  // Get chain id
-  const chainId = await ethers.provider.getNetwork().then((network) => network.chainId);
-  if (chainId === 31337n) {
+  if (network.config.chainId) {
     // Hardhat
     return;
   }
 
   // sleep 10s
-  await new Promise((r) => setTimeout(r, 10000));
+  delay(10000);
 
   console.log('Etherscan contract verification starting now.');
   try {
     await run('verify:verify', {
-      address: await bulkwriter.getAddress(),
+      address: bulkwriterAddress,
       constructorArguments: [],
     });
   } catch (error) {
@@ -46,7 +49,7 @@ async function main() {
 
   try {
     await run('verify:verify', {
-      address: await catalogUtils.getAddress(),
+      address: catalogUtilsAddress,
       constructorArguments: [],
     });
   } catch (error) {
@@ -55,7 +58,7 @@ async function main() {
 
   try {
     await run('verify:verify', {
-      address: await collectionUtils.getAddress(),
+      address: collectionUtilsAddress,
       constructorArguments: [],
     });
   } catch (error) {
@@ -64,7 +67,7 @@ async function main() {
 
   try {
     await run('verify:verify', {
-      address: await renderUtils.getAddress(),
+      address: renderUtilsAddress,
       constructorArguments: [],
     });
   } catch (error) {
