@@ -4,6 +4,7 @@
   "description": "Template for new projects using RMRK protocol on EVM",
   "scripts": {
     "test": "hardhat typechain && hardhat test",
+    "compile": "hardhat compile",
     "typechain": "hardhat typechain",
     "deploy:catalog": "hardhat run scripts/run-deploy-catalog.ts",
     "deploy:contracts": "hardhat run scripts/run-deploy.ts",
