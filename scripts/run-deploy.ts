@@ -31,7 +31,7 @@ async function deployContracts(): Promise<SimpleEquippable> {
     const contractAddress = await contract.getAddress();
     console.log(`SimpleEquippable deployed to ${contractAddress}.`);
 
-    if (network.config.chainId !== 31337) {
+    if (network.name !== 'hardhat' && network.name !== 'localhost') {
       console.log('Waiting 10 seconds before verifying contract...');
       delay(10000);
       await run('verify:verify', {

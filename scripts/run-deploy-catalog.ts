@@ -19,7 +19,7 @@ async function main() {
   const catalogAddress = await catalog.getAddress();
   console.log('Catalog deployed to:', catalogAddress);
 
-  if (network.config.chainId === 31337) {
+  if (network.name === 'hardhat' || network.name === 'localhost') {
     // Hardhat
     return;
   }

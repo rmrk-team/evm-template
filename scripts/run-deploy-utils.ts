@@ -29,7 +29,7 @@ async function main() {
   const renderUtilsAddress = await renderUtils.getAddress();
   console.log('Equip Render Utils deployed to:', renderUtilsAddress);
 
-  if (network.config.chainId) {
+  if (network.name === 'hardhat' || network.name === 'localhost') {
     // Hardhat
     return;
   }
