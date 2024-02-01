@@ -1,4 +1,5 @@
 {
+  "plugins": ["prettier-plugin-solidity"],
   "semi": false,
   "overrides": [
     {
@@ -8,7 +9,8 @@
         "tabWidth": 4,
         "useTabs": false,
         "singleQuote": false,
-        "bracketSpacing": false
+        "bracketSpacing": false,
+        "compiler": "0.8.21"
       }
     },
     {

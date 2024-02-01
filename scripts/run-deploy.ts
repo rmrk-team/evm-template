@@ -2,7 +2,7 @@ import { ethers, run, network } from 'hardhat';
 import { SimpleEquippable } from '../typechain-types';
 import { InitDataNativePay } from '../typechain-types/contracts/SimpleEquippable';
 import { getRegistry } from './get-gegistry';
-import { delay } from './utils';
+import { delay, isHardhatNetwork } from './utils';
 
 async function main() {
   await deployContracts();
@@ -31,7 +31,7 @@ async function deployContracts(): Promise<SimpleEquippable> {
     const contractAddress = await contract.getAddress();
     console.log(`SimpleEquippable deployed to ${contractAddress}.`);
 
-    if (network.name !== 'hardhat' && network.name !== 'localhost') {
+    if (!isHardhatNetwork()) {
       console.log('Waiting 10 seconds before verifying contract...');
       delay(10000);
       await run('verify:verify', {

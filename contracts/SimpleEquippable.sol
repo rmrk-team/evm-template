@@ -2,7 +2,9 @@
 
 pragma solidity ^0.8.21;
 
-import {RMRKEquippableLazyMintNative} from "@rmrk-team/evm-contracts/contracts/implementations/lazyMintNative/RMRKEquippableLazyMintNative.sol";
+import {
+    RMRKEquippableLazyMintNative
+} from "@rmrk-team/evm-contracts/contracts/implementations/lazyMintNative/RMRKEquippableLazyMintNative.sol";
 
 contract SimpleEquippable is RMRKEquippableLazyMintNative {
     constructor(

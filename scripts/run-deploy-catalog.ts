@@ -1,5 +1,5 @@
-import { ethers, run, network } from 'hardhat';
-import { delay } from './utils';
+import { ethers } from 'hardhat';
+import { deployCatalog } from './deploy-methods';
 
 async function main() {
   const [deployer] = await ethers.getSigners();
@@ -13,29 +13,7 @@ async function main() {
     return;
   }
 
-  const catalogFactory = await ethers.getContractFactory('RMRKCatalogImpl');
-  const catalog = await catalogFactory.deploy(catalogMetadataUri, catalogType);
-  await catalog.waitForDeployment();
-  const catalogAddress = await catalog.getAddress();
-  console.log('Catalog deployed to:', catalogAddress);
-
-  if (network.name === 'hardhat' || network.name === 'localhost') {
-    // Hardhat
-    return;
-  }
-
-  // sleep 10s
-  delay(10000);
-
-  console.log('Etherscan contract verification starting now.');
-  try {
-    await run('verify:verify', {
-      address: catalogAddress,
-      constructorArguments: [catalogMetadataUri, catalogType],
-    });
-  } catch (error) {
-    // probably already verified
-  }
+  await deployCatalog(catalogMetadataUri, catalogType);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
