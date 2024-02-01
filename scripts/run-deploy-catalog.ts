@@ -3,7 +3,7 @@ import { deployCatalog } from './deploy-methods';
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-  console.log('Deployer address: ' + (await deployer.getAddress()));
+  console.log(`Deployer address: ${deployer.address}`);
 
   const catalogMetadataUri = undefined; // TODO: Replace with IPFS with metadata for collection, e.g. 'ipfs://collectionMeta.json' See https://evm.rmrk.app/metadata#catalog for more info on expected content
   const catalogType = undefined; // TODO: Replace with catalog mime type, e.g. 'image/png'
