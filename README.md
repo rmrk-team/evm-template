@@ -113,3 +113,113 @@ For example, to get the name of the token `15` on collection `0x5FbDB2315678afec
 ```bash copy
 pnpm hardhat attributes:get 0x5FbDB2315678afecb367f032d93F642f64180aa3 15 string name --network sepolia
 ```
+
+## Generating Metadata
+
+This package provides a way to generate metadata for collections, tokens, assets, catalogs, fixed parts and slot parts. For not it is individual but we plan to add a way to generate them from a csv file where needed.
+
+The scripts will generate all the metadata under a metadata directory on the root of the project, and subfolders per collection. Some scripts include a COLLECTION_SLUG argument, this is used to create a subfolder for the collection metadata.
+
+You do not need to create any folder, the scripts will do it for you. You can use the following commands to generate metadata.
+
+### For collections
+
+Basic usage:
+
+```bash copy
+pnpm hardhat metadata:collection COLLECTION_SLUG NAME DESCRIPTION MEDIA_URI [--animation-uri <STRING>] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>] [--tags <STRING>] [--thumbnail-uri <STRING>]
+```
+
+Example:
+
+```bash copy
+pnpm hardhat metadata:collection backgrounds "Kanaria Community Backgrounds" "Created by 3 artists" "ipfs://collection-image-uri" --thumbnail-uri "ipfs://collection-image-thumb-uri"
+```
+
+See `pnpm hardhat metadata:collection --help` for a detailed description of each parameter.
+
+### For tokens
+
+Basic usage:
+
+```bash copy
+pnpm hardhat metadata:token COLLECTION_SLUG TOKEN_ID NAME DESCRIPTION MEDIA_URI [--animation-uri <STRING>] [--attributes <STRING>] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>] [--thumbnail-uri <STRING>]
+```
+
+Example:
+
+```bash copy
+pnpm hardhat metadata:token backgrounds 1 "Mystical Background" "A mystical background" "ipfs://token-image-uri" --attributes "Max units:number:1,Artist:string:winner"
+```
+
+See `pnpm hardhat metadata:token --help` for a detailed list of arguments.
+
+### For assets
+
+Basic usage:
+
+```bash copy
+pnpm hardhat metadata:asset COLLECTION_SLUG NAME DESCRIPTION MEDIA_URI [--attributes <STRING>] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>] [--thumbnail-uri <STRING>]
+```
+
+Example:
+
+```bash copy
+pnpm hardhat metadata:asset backgrounds "Mystical Background" "A mystical background" "ipfs://token-image-uri" --attributes "Max units:number:1,Artist:string:winner"
+```
+
+See `pnpm hardhat metadata:asset --help` for a detailed list of arguments.
+
+### For catalogs
+
+Basic usage:
+
+```bash copy
+pnpm hardhat metadata:catalog NAME DESCRIPTION
+```
+
+Example:
+
+```bash copy
+pnpm hardhat metadata:catalog "Kanaria Catalog" "A catalog with assets of mystical creatures"
+```
+
+See `pnpm hardhat metadata:catalog --help` for a detailed list of arguments.
+
+### For Fixed Parts
+
+Basic usage:
+
+```bash copy
+pnpm hardhat metadata:fixedPart NAME MEDIA_URI [DESCRIPTION]
+```
+
+Example:
+
+```bash copy
+pnpm hardhat metadata:fixedPart "Left Fire Wing" "ipfs://fixedpart-image-uri"
+```
+
+See `pnpm hardhat metadata:fixedPart --help` for a detailed list of arguments.
+
+### For Slot Parts
+
+Basic usage:
+
+```bash copy
+pnpm hardhat metadata:slotPart NAME [--description <STRING>] [--fallback-media-uri <STRING>]
+```
+
+Example with no fallback:
+
+```bash copy
+pnpm hardhat metadata:slotPart "Left Wing Item" --description "A slot on the left wing to hold items"
+```
+
+Example with fallback, rendered if nothing is equipped in the slot:
+
+```bash copy
+pnpm hardhat metadata:slotPart "Background" --fallback-media-uri "ipfs://fallback-image-uri"
+```
+
+See `pnpm hardhat metadata:slotPart --help` for a detailed list of arguments.
