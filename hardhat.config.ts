@@ -5,6 +5,7 @@ import '@nomicfoundation/hardhat-toolbox';
 import 'hardhat-contract-sizer';
 import './tasks/emotes';
 import './tasks/attributes';
+import './tasks/metadata';
 
 const accounts = process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [];
 
