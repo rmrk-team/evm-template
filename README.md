@@ -33,19 +33,37 @@ Remember to give credit to RMRK if you're using it's technology. Check the licen
 You can emote to an NFT from the account that you have configured in your `.env` file with the `PRIVATE_KEY` variable. To do so you must simply call:
 
 ```bash copy
-pnpm hardhat emote CONTRACT_ADDRESS TOKEN_ID EMOTE [ENABLE] --network NETWORK
+pnpm hardhat emotes:emote CONTRACT_ADDRESS TOKEN_ID EMOTE [ENABLE] --network NETWORK
 ```
 
 For example, to send a 😁 emote to the token Id `15` on collection `0x5FbDB2315678afecb367f032d93F642f64180aa3` and sepolia network, you would call:
 
 ```bash copy
-pnpm hardhat emote 0x5FbDB2315678afecb367f032d93F642f64180aa3 15 '😁' --network sepolia
+pnpm hardhat emotes:emote 0x5FbDB2315678afecb367f032d93F642f64180aa3 15 '😁' --network sepolia
 ```
 
 To remove it you would call:
 
 ```bash copy
-pnpm hardhat emote 0x5FbDB2315678afecb367f032d93F642f64180aa3 15 😁 false --network sepolia
+pnpm hardhat emotes:emote 0x5FbDB2315678afecb367f032d93F642f64180aa3 15 😁 false --network sepolia
+```
+
+You can also send emotes in bulk, the collection and enable parameters are used for all emotes, the token ids and emotes must be comma separated and have the same length. To do so you must simply call:
+
+```bash copy
+pnpm hardhat emotes:bulkEmote CONTRACT_ADDRESS TOKEN_IDS EMOTES [ENABLE] --network NETWORK
+```
+
+For example, to send a 😁 emote to the token Id `15` and a 😂 emote to the token Id `16` on collection `0x5FbDB2315678afecb367f032d93F642f64180aa3` and sepolia network, you would call:
+
+```bash copy
+pnpm hardhat emotes:bulkEmote 0x5FbDB2315678afecb367f032d93F642f64180aa3 '15,16' '😁,😂' --network sepolia
+```
+
+To remove it you would call:
+
+```bash copy
+pnpm hardhat emotes:bulkEmote 0x5FbDB2315678afecb367f032d93F642f64180aa3 '15,16' '😁,😂' false --network sepolia
 ```
 
 ## Using Token Attributes Repository (Draft feature)
