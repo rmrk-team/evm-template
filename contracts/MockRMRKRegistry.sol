@@ -19,6 +19,13 @@ import {
     RMRKCatalogImpl
 } from "@rmrk-team/evm-contracts/contracts/implementations/RMRKCatalogImpl.sol";
 
+import {
+    RMRKTokenAttributesRepository
+} from "@rmrk-team/evm-contracts/contracts/RMRK/extension/tokenAttributes/RMRKTokenAttributesRepository.sol";
+import {
+    RMRKEmotesRepository
+} from "@rmrk-team/evm-contracts/contracts/RMRK/emotable/RMRKEmotesRepository.sol";
+
 // Mock RMRK Registry to expose addExternalCollection function.
 contract MockRMRKRegistry {
     function addExternalCollection(
