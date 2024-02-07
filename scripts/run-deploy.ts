@@ -23,7 +23,7 @@ async function deployContracts(): Promise<SimpleEquippable> {
     const contract: SimpleEquippable = await contractFactory.deploy(...args);
     await contract.waitForDeployment();
     const contractAddress = await contract.getAddress();
-    console.log(`SimpleEquippable deployed to ${contractAddress}.`);
+    console.log(`SimpleEquippable deployed to ${contractAddress}`);
 
     if (!isHardhatNetwork()) {
       console.log('Waiting 10 seconds before verifying contract...');
