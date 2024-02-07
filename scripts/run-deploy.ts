@@ -1,6 +1,5 @@
 import { ethers, run, network } from 'hardhat';
 import { SimpleEquippable } from '../typechain-types';
-import { InitDataNativePay } from '../typechain-types/contracts/SimpleEquippable';
 import { getRegistry } from './get-gegistry';
 import { delay, isHardhatNetwork } from './utils';
 

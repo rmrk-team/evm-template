@@ -16,7 +16,7 @@ const TOKEN_ATTRIBUTES_AVAILABLE_NETWORKS = [
 export async function getEmotesRepository(
   hre: HardhatRuntimeEnvironment,
 ): Promise<RMRKEmotesRepository> {
-  return (await ethers.getContractFactory('RMRKEmotesRepository')).attach(
+  return (await hre.ethers.getContractFactory('RMRKEmotesRepository')).attach(
     EMOTES_REPOSITORY_ADDRESS,
   ) as RMRKEmotesRepository;
 }
@@ -28,7 +28,7 @@ export async function getAttributesRepository(
     throw new Error(
       `The network ${hre.network.name} is not supported by this task, please contact us through our telegram so we deploy the draft attributes repo on your network.`,
     );
-  return (await ethers.getContractFactory('RMRKTokenAttributesRepository')).attach(
+  return (await hre.ethers.getContractFactory('RMRKTokenAttributesRepository')).attach(
     hre.network.name === 'moonbaseAlpha'
       ? TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT_MOONBASE
       : TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT,
