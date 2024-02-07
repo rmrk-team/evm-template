@@ -26,8 +26,8 @@ async function deployContracts(): Promise<SimpleEquippable> {
     console.log(`SimpleEquippable deployed to ${contractAddress}`);
 
     if (!isHardhatNetwork()) {
-      console.log('Waiting 10 seconds before verifying contract...');
-      delay(10000);
+      console.log('Waiting 20 seconds before verifying contract...');
+      delay(20000);
       await run('verify:verify', {
         address: contractAddress,
         constructorArguments: args,

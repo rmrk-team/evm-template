@@ -72,8 +72,8 @@ async function verifyIfNotHardhat(contractAddress: string, args: any[] = []) {
     return;
   }
 
-  // sleep 10s
-  delay(10000);
+  // sleep 20s
+  delay(20000);
 
   console.log('Etherscan contract verification starting now.');
   try {
