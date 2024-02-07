@@ -3,21 +3,23 @@
 pragma solidity ^0.8.21;
 
 import {
-    RMRKEquippableLazyMintNative
-} from "@rmrk-team/evm-contracts/contracts/implementations/lazyMintNative/RMRKEquippableLazyMintNative.sol";
+    RMRKEquippablePreMint
+} from "@rmrk-team/evm-contracts/contracts/implementations/premint/RMRKEquippablePreMint.sol";
 
-contract SimpleEquippable is RMRKEquippableLazyMintNative {
+contract SimpleEquippable is RMRKEquippablePreMint {
     constructor(
         string memory collectionMetadata,
-        string memory baseTokenURI,
-        InitData memory data
+        uint256 maxSupply,
+        address royaltyRecipient,
+        uint16 royaltyPercentageBps
     )
-        RMRKEquippableLazyMintNative(
+        RMRKEquippablePreMint(
             "SimpleEquippable",
             "SE",
             collectionMetadata,
-            baseTokenURI,
-            data
+            maxSupply,
+            royaltyRecipient,
+            royaltyPercentageBps
         )
     {}
 }

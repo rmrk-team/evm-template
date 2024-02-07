@@ -12,20 +12,15 @@ async function deployContracts(): Promise<SimpleEquippable> {
   console.log(`Deploying SimpleEquippable to ${network.name} blockchain...`);
 
   const contractFactory = await ethers.getContractFactory('SimpleEquippable');
-  const initData: InitDataNativePay.InitDataStruct = {
-    royaltyRecipient: (await ethers.getSigners())[0].address,
-    royaltyPercentageBps: 300,
-    maxSupply: 1000n,
-    pricePerMint: ethers.parseUnits('1', 18),
-  };
-
   const collectionMeta = undefined; // TODO: Replace with IPFS with metadata for collection, e.g. 'ipfs://collectionMeta.json' See https://evm.rmrk.app/metadata#collection-metadata for more info on expected content
-  const baseURI = undefined; // TODO: Replace with IPFS with metadata for collection, e.g. 'ipfs://baseURI/'
+  const maxSupply = undefined; // TODO: Replace with max supply of the collection
+  const royaltyRecipient = (await ethers.getSigners())[0].address;
+  const royaltyPercentageBps = 300; // 3%
 
-  if (collectionMeta === undefined || baseURI === undefined) {
-    throw new Error('Please set collectionMeta and baseURI');
+  if (collectionMeta === undefined || maxSupply === undefined) {
+    throw new Error('Please set collectionMeta and maxSupply');
   } else {
-    const args = [collectionMeta, baseURI, initData] as const;
+    const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps] as const;
     const contract: SimpleEquippable = await contractFactory.deploy(...args);
     await contract.waitForDeployment();
     const contractAddress = await contract.getAddress();
