@@ -1,4 +1,4 @@
-import { int } from 'hardhat/internal/core/params/argumentTypes';
+import { boolean, int } from 'hardhat/internal/core/params/argumentTypes';
 import { getAttributesRepository } from './utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { task } from 'hardhat/config';
@@ -18,6 +18,13 @@ task('attributes:configure', 'Registers access and configures attribute for the 
     'Specific Address, only if access type is 4.',
     '0x0000000000000000000000000000000000000000',
   )
+  .addParam(
+    'firstTime',
+    'Whether to register access control, only needed for the first time',
+    false,
+    boolean,
+    true,
+  )
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
     await configureAttribute(
       hre,
@@ -25,6 +32,7 @@ task('attributes:configure', 'Registers access and configures attribute for the 
       params.attributesKey,
       params.accessType,
       params.specificAddress,
+      params.firstTime,
     );
   });
 
@@ -66,6 +74,7 @@ async function configureAttribute(
   attributesKey: string,
   accessType: number,
   specificAddress: string,
+  firstTime: boolean,
 ): Promise<void> {
   if (accessType === 4 && !specificAddress)
     throw new Error('Specific address is required for access type 4');
@@ -73,10 +82,13 @@ async function configureAttribute(
   const [deployer] = await hre.ethers.getSigners();
 
   const tokenAttributes = await getAttributesRepository(hre);
-  let tx = await tokenAttributes.registerAccessControl(collection, deployer.address, true);
-  await tx.wait();
 
-  tx = await tokenAttributes.manageAccessControl(
+  if (firstTime) {
+    const tx = await tokenAttributes.registerAccessControl(collection, deployer.address, true);
+    await tx.wait();
+  }
+
+  let tx = await tokenAttributes.manageAccessControl(
     collection,
     attributesKey,
     accessType,

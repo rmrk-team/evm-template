@@ -68,12 +68,12 @@ pnpm hardhat emotes:bulkEmote 0x5FbDB2315678afecb367f032d93F642f64180aa3 '15,16'
 
 ## Using Token Attributes Repository (Draft feature)
 
-You can use token repositories to store your tokens. This is a draft feature so the final address will change, for now it is only deployed on a few test networks. Contact us through our implementers telegram group if you want us to deploy in another network.
+You can use token repository to store your tokens's attributes. This is a draft feature so the final address will change, for now it is only deployed on a few test networks. Contact us through our implementers telegram group if you want us to deploy in another network.
 
 To use it, you must first configure the attribute, you can do so by calling:
 
 ```bash copy
-pnpm hardhat attributes:configure CONTRACT_ADDRESS ATTRIBUTE_NAME ACCESS_TYPE [SPECIFIC_ADDRESS] --network NETWORK
+pnpm hardhat attributes:configure CONTRACT_ADDRESS ATTRIBUTE_NAME ACCESS_TYPE [SPECIFIC_ADDRESS] [--first-time true] --network NETWORK
 ```
 
 Access type defines who can write to the attribute:
@@ -84,10 +84,12 @@ Access type defines who can write to the attribute:
 - 3: TokenOwner
 - 4: SpecificAddress. In this case you must specify in the fourth argument.
 
+The first time you configure an attribute you will also need to register access control. This might removed from the final version, but for now you can do so by adding the `--first-time` flag to the command.
+
 If we want to configure the name attribute on collection `0x5FbDB2315678afecb367f032d93F642f64180aa3` to be written by the token owner, we would call (with the collection owner account):
 
 ```bash copy
-pnpm hardhat attributes:configure 0xd536FC5918117776064AEF0b2e7b126D63d697F3 name 3 --network baseSepolia
+pnpm hardhat attributes:configure 0xd536FC5918117776064AEF0b2e7b126D63d697F3 name 3 --first-time true --network baseSepolia
 ```
 
 Then, to set the attribute, you can call:
