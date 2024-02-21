@@ -379,7 +379,7 @@ task(
       params.externalUri,
       params.license,
       params.licenseUri,
-      params.baseUri,
+      params.baseUri || '',
     );
   });
 
@@ -424,7 +424,7 @@ task(
       params.externalUri,
       params.license,
       params.licenseUri,
-      params.baseUri,
+      params.baseUri || '',
     );
   });
 
@@ -469,7 +469,7 @@ task(
       params.externalUri,
       params.license,
       params.licenseUri,
-      params.baseUri,
+      params.baseUri || '',
     );
   });
 
@@ -479,14 +479,14 @@ task(
 )
   .addPositionalParam(
     'path',
-    'Path to csv with slot part metadata, See metadata/slots.csv for reference. Do not remove the headers.',
-    './metadata/slots.csv',
+    'Path to csv with slot part metadata, See metadata/slot-parts.csv for reference. Do not remove the headers.',
+    './metadata/slot-parts.csv',
     string,
     true,
   )
   .addParam('baseUri', 'A URI to prepend to mediaUri for every token.', undefined, string, true)
   .setAction(async (params) => {
-    await generateMultipleSlotPartsMetadata(params.path, params.baseUri);
+    await generateMultipleSlotPartsMetadata(params.path, params.baseUri || '');
   });
 
 task(
@@ -508,7 +508,7 @@ task(
     true,
   )
   .setAction(async (params) => {
-    await generateMultipleFixedPartsMetadata(params.path, params.baseUri);
+    await generateMultipleFixedPartsMetadata(params.path, params.baseUri || '');
   });
 
 async function generateMultipleCollectionsMetadata(
@@ -526,9 +526,9 @@ async function generateMultipleCollectionsMetadata(
       record.collectionSlug,
       record.name,
       record.description,
-      baseUri + record.mediaUri,
+      record.mediaUri === '' ? '' : baseUri + record.mediaUri,
       externalUri,
-      baseUri + record.thumbnailUri,
+      record.thumbnailUri === '' ? '' : baseUri + record.thumbnailUri,
       license,
       licenseUri,
       record.tags,
@@ -555,10 +555,10 @@ async function generateMultipleTokenMetadata(
       record.id,
       record.name,
       record.description,
-      baseUri + record.mediaUri,
+      record.mediaUri === '' ? '' : baseUri + record.mediaUri,
       externalUri,
-      baseUri + record.thumbnailUri,
-      baseUri + record.animationUri,
+      record.thumbnailUri === '' ? '' : baseUri + record.thumbnailUri,
+      record.animationUri === '' ? '' : baseUri + record.animationUri,
       license,
       licenseUri,
       record.attributes,
@@ -584,10 +584,10 @@ async function generateMultipleAssetMetadata(
       collectionSlug,
       record.name,
       record.description,
-      baseUri + record.mediaUri,
+      record.mediaUri === '' ? '' : baseUri + record.mediaUri,
       externalUri,
-      baseUri + record.thumbnailUri,
-      baseUri + record.animationUri,
+      record.thumbnailUri === '' ? '' : baseUri + record.thumbnailUri,
+      record.animationUri === '' ? '' : baseUri + record.animationUri,
       license,
       licenseUri,
       record.attributes,
@@ -602,7 +602,11 @@ async function generateMultipleSlotPartsMetadata(path: string, baseUri: string):
   const parser = parse(fs.readFileSync(path, 'utf8'), { columns: true });
   let total = 0;
   for await (const record of parser) {
-    generateslotPartMetadata(record.name, record.description, baseUri + record.fallbackMediaUri);
+    generateslotPartMetadata(
+      record.name,
+      record.description,
+      record.fallbackMediaUri === '' ? '' : baseUri + record.fallbackMediaUri,
+    );
     total++;
   }
   console.log(`Processed ${total} slots.`);
@@ -613,7 +617,11 @@ async function generateMultipleFixedPartsMetadata(path: string, baseUri: string)
   const parser = parse(fs.readFileSync(path, 'utf8'), { columns: true });
   let total = 0;
   for await (const record of parser) {
-    generateFixedPartMetadata(record.name, record.description, baseUri + record.mediaUri);
+    generateFixedPartMetadata(
+      record.name,
+      record.description,
+      record.mediaUri === '' ? '' : baseUri + record.mediaUri,
+    );
     total++;
   }
 }

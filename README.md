@@ -148,7 +148,7 @@ You can also create the metadata for multiple collections using a csv file. See 
 
 Basic usage:
 ```bash copy
-pnpm hardhat metadata:collections-csv [CSV_FILE_PATH] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>]
+pnpm hardhat metadata:collections-csv [CSV_FILE_PATH] [--base-uri <STRING>] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>]
 ```
 
 Example:
@@ -182,7 +182,7 @@ You can also create the metadata for multiple tokens using a csv file. See 'meta
 
 Basic usage:
 ```bash copy
-pnpm hardhat metadata:tokens-csv COLLECTION_SLUG [CSV_FILE_PATH] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>]
+pnpm hardhat metadata:tokens-csv COLLECTION_SLUG [CSV_FILE_PATH] [--base-uri <STRING>] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>]
 ```
 
 Example:
@@ -216,7 +216,7 @@ You can also create the metadata for multiple assets using a csv file. See 'meta
 
 Basic usage:
 ```bash copy
-pnpm hardhat metadata:assets-csv COLLECTION_SLUG [CSV_FILE_PATH] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>]
+pnpm hardhat metadata:assets-csv COLLECTION_SLUG [CSV_FILE_PATH] [--base-uri <STRING>] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>]
 ```
 
 Example:
@@ -266,7 +266,7 @@ You can also create the metadata for multiple fixed parts using a csv file. See 
 
 Basic usage:
 ```bash copy
-pnpm hardhat metadata:fixed-parts-csv [CSV_FILE_PATH]
+pnpm hardhat metadata:fixed-parts-csv [CSV_FILE_PATH] [--base-uri <STRING>]
 ```
 
 Example:
@@ -306,7 +306,7 @@ You can also create the metadata for multiple slot parts using a csv file. See '
 
 Basic usage:
 ```bash copy
-pnpm hardhat metadata:slot-parts-csv [CSV_FILE_PATH]
+pnpm hardhat metadata:slot-parts-csv [CSV_FILE_PATH] [--base-uri <STRING>]
 ```
 
 Example:
