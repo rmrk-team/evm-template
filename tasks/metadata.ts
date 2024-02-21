@@ -2,6 +2,7 @@ import { string, int } from 'hardhat/internal/core/params/argumentTypes';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { task } from 'hardhat/config';
 import fs from 'fs';
+import { parse } from 'csv-parse';
 
 const METADATA_DIR_FOR_COLLECTIONS = './metadata/:collection-slug';
 const METADATA_DIR_FOR_TOKEN_URIS = './metadata/:collection-slug/tokenURIs';
@@ -9,6 +10,7 @@ const METADATA_DIR_FOR_ASSETS = './metadata/:collection-slug/assets';
 const METADATA_DIR_FOR_CATALOG = './metadata/catalog';
 const METADATA_DIR_FOR_FIXED_PARTS = `${METADATA_DIR_FOR_CATALOG}/fixed`;
 const METADATA_DIR_FOR_SLOT_PARTS = `${METADATA_DIR_FOR_CATALOG}/slot`;
+const VALID_TYPES = ['number', 'float', 'integer', 'string', 'date', 'percentage', 'boolean'];
 
 interface CollectionMetadata {
   name: string;
@@ -110,7 +112,7 @@ task(
     string,
     true,
   )
-  .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+  .setAction(async (params) => {
     generateCollectionMetadata(
       params.collectionSlug,
       params.name,
@@ -139,7 +141,7 @@ task('metadata:catalog', 'Creates the metadata for a catalog under the metadata/
     string,
     false,
   )
-  .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+  .setAction(async (params) => {
     generateCatalogMetadata(params.name, params.description);
   });
 
@@ -203,7 +205,7 @@ task('metadata:token', 'Creates the metadata for a token under the metadata/toke
     string,
     true,
   )
-  .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+  .setAction(async (params) => {
     generateTokenMetadata(
       params.collectionSlug,
       params.id,
@@ -271,7 +273,7 @@ task('metadata:asset', 'Creates the metadata for an asset under the metadata/ass
     string,
     true,
   )
-  .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+  .setAction(async (params) => {
     generateAssetMetadata(
       params.collectionSlug,
       params.name,
@@ -287,7 +289,7 @@ task('metadata:asset', 'Creates the metadata for an asset under the metadata/ass
   });
 
 task(
-  'metadata:slotPart',
+  'metadata:slot-part',
   'Creates the metadata for a slot part under the metadata/catalog/slots directory.',
 )
   .addPositionalParam(
@@ -311,12 +313,12 @@ task(
     string,
     true,
   )
-  .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+  .setAction(async (params) => {
     generateslotPartMetadata(params.name, params.description, params.fallbackMediaUri);
   });
 
 task(
-  'metadata:fixedPart',
+  'metadata:fixed-part',
   'Creates the metadata for a fixed part under the metadata/catalog/fixed directory.',
 )
   .addPositionalParam(
@@ -340,9 +342,281 @@ task(
     string,
     true,
   )
-  .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+  .setAction(async (params) => {
     generateFixedPartMetadata(params.name, params.description, params.mediaUri);
   });
+
+task(
+  'metadata:collections-csv',
+  'Creates the metadata for a collection under the metadata/collections directory. The passed externalUri and license data will be used for all collections in the CSV. The CSV must have the EXACT following headers: collectionSlug, name, description, mediaUri, thumbnailUri, tags.',
+)
+  .addPositionalParam(
+    'path',
+    'Path to csv with collection metadata, See metadata/collections.csv for reference. Do not remove the headers.',
+    './metadata/collections.csv',
+    string,
+    true,
+  )
+  .addParam(
+    'externalUri',
+    'HTTP or IPFS URL for finding out more about this project. If IPFS, MUST be in the format of ipfs://HASH',
+    undefined,
+    string,
+    true,
+  )
+  .addParam('license', 'A statement about the NFT license.', undefined, string, true)
+  .addParam('licenseUri', 'A URI to a statement of license.', undefined, string, true)
+  .addParam(
+    'baseUri',
+    'A URI to prepend to mediaUri and thumbnailUri for every collection.',
+    undefined,
+    string,
+    true,
+  )
+  .setAction(async (params) => {
+    await generateMultipleCollectionsMetadata(
+      params.path,
+      params.externalUri,
+      params.license,
+      params.licenseUri,
+      params.baseUri,
+    );
+  });
+
+task(
+  'metadata:tokens-csv',
+  'Creates the metadata for tokens of a collection under the metadata/collections directory. The passed externalUri and license data will be used for all collections in the CSV. The CSV must have the EXACT following headers: id, name, description, mediaUri, thumbnailUri, animationUri, attributes.',
+)
+  .addPositionalParam(
+    'collectionSlug',
+    'Used to group the metadata for a specific collection in a unique way. e.g. "dot-leap-badges".',
+    undefined,
+    string,
+    false,
+  )
+  .addPositionalParam(
+    'path',
+    'Path to csv with collection metadata, See metadata/tokens.csv for reference. Do not remove the headers.',
+    './metadata/tokens.csv',
+    string,
+    true,
+  )
+  .addParam(
+    'externalUri',
+    'HTTP or IPFS URL for finding out more about this project. If IPFS, MUST be in the format of ipfs://HASH',
+    undefined,
+    string,
+    true,
+  )
+  .addParam('license', 'A statement about the NFT license.', undefined, string, true)
+  .addParam('licenseUri', 'A URI to a statement of license.', undefined, string, true)
+  .addParam(
+    'baseUri',
+    'A URI to prepend to mediaUri, thumbnailUri and animationUri for every token.',
+    undefined,
+    string,
+    true,
+  )
+  .setAction(async (params) => {
+    await generateMultipleTokenMetadata(
+      params.path,
+      params.collectionSlug,
+      params.externalUri,
+      params.license,
+      params.licenseUri,
+      params.baseUri,
+    );
+  });
+
+task(
+  'metadata:assets-csv',
+  'Creates the metadata for assets of a collection under the metadata/collections directory. The passed externalUri and license data will be used for all collections in the CSV. The CSV must have the EXACT following headers: name, description, mediaUri, thumbnailUri, animationUri, attributes.',
+)
+  .addPositionalParam(
+    'collectionSlug',
+    'Used to group the metadata for a specific collection in a unique way. e.g. "dot-leap-badges".',
+    undefined,
+    string,
+    false,
+  )
+  .addPositionalParam(
+    'path',
+    'Path to csv with collection metadata, See metadata/assets.csv for reference. Do not remove the headers.',
+    './metadata/assets.csv',
+    string,
+    true,
+  )
+  .addParam(
+    'externalUri',
+    'HTTP or IPFS URL for finding out more about this project. If IPFS, MUST be in the format of ipfs://HASH',
+    undefined,
+    string,
+    true,
+  )
+  .addParam('license', 'A statement about the NFT license.', undefined, string, true)
+  .addParam('licenseUri', 'A URI to a statement of license.', undefined, string, true)
+  .addParam(
+    'baseUri',
+    'A URI to prepend to mediaUri, thumbnailUri and animationUri for every asset.',
+    undefined,
+    string,
+    true,
+  )
+  .setAction(async (params) => {
+    await generateMultipleAssetMetadata(
+      params.path,
+      params.collectionSlug,
+      params.externalUri,
+      params.license,
+      params.licenseUri,
+      params.baseUri,
+    );
+  });
+
+task(
+  'metadata:slot-parts-csv',
+  'Creates the metadata for slot parts under the metadata/catalog/slots directory. The CSV must have the EXACT following headers: name, description, fallbackMediaUri.',
+)
+  .addPositionalParam(
+    'path',
+    'Path to csv with slot part metadata, See metadata/slots.csv for reference. Do not remove the headers.',
+    './metadata/slots.csv',
+    string,
+    true,
+  )
+  .addParam('baseUri', 'A URI to prepend to mediaUri for every token.', undefined, string, true)
+  .setAction(async (params) => {
+    await generateMultipleSlotPartsMetadata(params.path, params.baseUri);
+  });
+
+task(
+  'metadata:fixed-parts-csv',
+  'Creates the metadata for fixed parts under the metadata/catalog/fixed directory. The CSV must have the EXACT following headers: name, description, mediaUri.',
+)
+  .addPositionalParam(
+    'path',
+    'Path to csv with fixed part metadata, See metadata/fixed-parts.csv for reference. Do not remove the headers.',
+    './metadata/fixed-parts.csv',
+    string,
+    true,
+  )
+  .addParam(
+    'baseUri',
+    'A URI to prepend to fallbackMediaUri for every token.',
+    undefined,
+    string,
+    true,
+  )
+  .setAction(async (params) => {
+    await generateMultipleFixedPartsMetadata(params.path, params.baseUri);
+  });
+
+async function generateMultipleCollectionsMetadata(
+  path: string,
+  externalUri: string,
+  license: string,
+  licenseUri: string,
+  baseUri: string,
+): Promise<void> {
+  console.log('Reading collection metadata from', path);
+  const parser = parse(fs.readFileSync(path, 'utf8'), { columns: true });
+  let total = 0;
+  for await (const record of parser) {
+    generateCollectionMetadata(
+      record.collectionSlug,
+      record.name,
+      record.description,
+      baseUri + record.mediaUri,
+      externalUri,
+      baseUri + record.thumbnailUri,
+      license,
+      licenseUri,
+      record.tags,
+    );
+    total++;
+  }
+  console.log(`Processed ${total} collections.`);
+}
+
+async function generateMultipleTokenMetadata(
+  path: string,
+  collectionSlug: string,
+  externalUri: string,
+  license: string,
+  licenseUri: string,
+  baseUri: string,
+): Promise<void> {
+  console.log('Reading token metadata from', path);
+  const parser = parse(fs.readFileSync(path, 'utf8'), { columns: true });
+  let total = 0;
+  for await (const record of parser) {
+    generateTokenMetadata(
+      collectionSlug,
+      record.id,
+      record.name,
+      record.description,
+      baseUri + record.mediaUri,
+      externalUri,
+      baseUri + record.thumbnailUri,
+      baseUri + record.animationUri,
+      license,
+      licenseUri,
+      record.attributes,
+    );
+    total++;
+  }
+  console.log(`Processed ${total} tokens.`);
+}
+
+async function generateMultipleAssetMetadata(
+  path: string,
+  collectionSlug: string,
+  externalUri: string,
+  license: string,
+  licenseUri: string,
+  baseUri: string,
+): Promise<void> {
+  console.log('Reading asset metadata from', path);
+  const parser = parse(fs.readFileSync(path, 'utf8'), { columns: true });
+  let total = 0;
+  for await (const record of parser) {
+    generateAssetMetadata(
+      collectionSlug,
+      record.name,
+      record.description,
+      baseUri + record.mediaUri,
+      externalUri,
+      baseUri + record.thumbnailUri,
+      baseUri + record.animationUri,
+      license,
+      licenseUri,
+      record.attributes,
+    );
+    total++;
+  }
+  console.log(`Processed ${total} assets.`);
+}
+
+async function generateMultipleSlotPartsMetadata(path: string, baseUri: string): Promise<void> {
+  console.log('Reading slot metadata from', path);
+  const parser = parse(fs.readFileSync(path, 'utf8'), { columns: true });
+  let total = 0;
+  for await (const record of parser) {
+    generateslotPartMetadata(record.name, record.description, baseUri + record.fallbackMediaUri);
+    total++;
+  }
+  console.log(`Processed ${total} slots.`);
+}
+
+async function generateMultipleFixedPartsMetadata(path: string, baseUri: string): Promise<void> {
+  console.log('Reading fixed part metadata from', path);
+  const parser = parse(fs.readFileSync(path, 'utf8'), { columns: true });
+  let total = 0;
+  for await (const record of parser) {
+    generateFixedPartMetadata(record.name, record.description, baseUri + record.mediaUri);
+    total++;
+  }
+}
 
 function generateCollectionMetadata(
   collectionSlug: string,
@@ -420,7 +694,15 @@ function generateTokenMetadata(
   if (licenseUri) metadata.licenseUri = licenseUri;
   if (attributes) {
     metadata.attributes = attributes.split(',').map((attribute) => {
-      const [label, type, value] = attribute.split(':');
+      let [label, type, value] = attribute.split(':');
+      label = label.trim();
+      type = type.trim();
+      value = value.trim();
+      if (!VALID_TYPES.includes(type)) {
+        throw new Error(
+          `Invalid type "${type}" for attribute "${label}. Options are: ${VALID_TYPES.join(', ')}"`,
+        );
+      }
       return { label, trait_type: label, type, value };
     });
   }

@@ -1,0 +1,4 @@
+name,description,fallbackMediaUri
+Head,,
+Background,,ipfs://defaultIfNothingEquipped
+Body,Description and fallback are optional,

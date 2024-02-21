@@ -1,0 +1,4 @@
+name,description,mediaUri,thumbnailUri,animationUri,attributes
+Test Asset 1,This is a test,ipfs://mediaUri,,,"color:string:green,rank:integer:1"
+Test Asset 2,This is a test,ipfs://mediaUri,ipfs://thumbUri,ipfs://animationUri,"color:string:red,rank:integer:2"
+Test Asset 3,This is a test,ipfs://mediaUri,,,"color:string:red,

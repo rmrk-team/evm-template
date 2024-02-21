@@ -126,6 +126,8 @@ You do not need to create any folder, the scripts will do it for you. You can us
 
 ### For collections
 
+#### Single collection
+
 Basic usage:
 
 ```bash copy
@@ -140,7 +142,25 @@ pnpm hardhat metadata:collection backgrounds "Kanaria Community Backgrounds" "Cr
 
 See `pnpm hardhat metadata:collection --help` for a detailed description of each parameter.
 
+#### Multiple collections from csv
+
+You can also create the metadata for multiple collections using a csv file. See 'metadata/collections.csv' for an example. This file is used by default but you can also pass a different path as an argument.
+
+Basic usage:
+```bash copy
+pnpm hardhat metadata:collections-csv [CSV_FILE_PATH] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>]
+```
+
+Example:
+```bash copy
+pnpm hardhat metadata:collections-csv metadata/collections.csv
+```
+
+See `pnpm hardhat metadata:collections-csv --help` for a detailed list of arguments.
+
 ### For tokens
+
+#### Single token
 
 Basic usage:
 
@@ -156,7 +176,25 @@ pnpm hardhat metadata:token backgrounds 1 "Mystical Background" "A mystical back
 
 See `pnpm hardhat metadata:token --help` for a detailed list of arguments.
 
+#### Multiple tokens from csv
+
+You can also create the metadata for multiple tokens using a csv file. See 'metadata/tokens.csv' for an example. This file is used by default but you can also pass a different path as an argument.
+
+Basic usage:
+```bash copy
+pnpm hardhat metadata:tokens-csv COLLECTION_SLUG [CSV_FILE_PATH] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>]
+```
+
+Example:
+```bash copy
+pnpm hardhat metadata:tokens-csv backgrounds metadata/tokens.csv
+```
+
+See `pnpm hardhat metadata:tokens-csv --help` for a detailed list of arguments.
+
 ### For assets
+
+#### Single asset
 
 Basic usage:
 
@@ -171,6 +209,22 @@ pnpm hardhat metadata:asset backgrounds "Mystical Background" "A mystical backgr
 ```
 
 See `pnpm hardhat metadata:asset --help` for a detailed list of arguments.
+
+#### Multiple assets from csv
+
+You can also create the metadata for multiple assets using a csv file. See 'metadata/assets.csv' for an example. This file is used by default but you can also pass a different path as an argument.
+
+Basic usage:
+```bash copy
+pnpm hardhat metadata:assets-csv COLLECTION_SLUG [CSV_FILE_PATH] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>]
+```
+
+Example:
+```bash copy
+pnpm hardhat metadata:assets-csv backgrounds metadata/assets.csv
+```
+
+See `pnpm hardhat metadata:assets-csv --help` for a detailed list of arguments.
 
 ### For catalogs
 
@@ -190,38 +244,74 @@ See `pnpm hardhat metadata:catalog --help` for a detailed list of arguments.
 
 ### For Fixed Parts
 
+#### Single fixed part
+
 Basic usage:
 
 ```bash copy
-pnpm hardhat metadata:fixedPart NAME MEDIA_URI [DESCRIPTION]
+pnpm hardhat metadata:fixed-part NAME MEDIA_URI [DESCRIPTION]
 ```
 
 Example:
 
 ```bash copy
-pnpm hardhat metadata:fixedPart "Left Fire Wing" "ipfs://fixedpart-image-uri"
+pnpm hardhat metadata:fixed-part "Left Fire Wing" "ipfs://fixedpart-image-uri"
 ```
 
-See `pnpm hardhat metadata:fixedPart --help` for a detailed list of arguments.
+See `pnpm hardhat metadata:fixed-part --help` for a detailed list of arguments.
+
+#### Multiple fixed parts from csv
+
+You can also create the metadata for multiple fixed parts using a csv file. See 'metadata/fixed-parts.csv' for an example. This file is used by default but you can also pass a different path as an argument.
+
+Basic usage:
+```bash copy
+pnpm hardhat metadata:fixed-parts-csv [CSV_FILE_PATH]
+```
+
+Example:
+```bash copy
+pnpm hardhat metadata:fixed-parts-csv metadata/fixed-parts.csv
+```
+
+See `pnpm hardhat metadata:fixed-parts-csv --help` for a detailed list of arguments.
 
 ### For Slot Parts
+
+#### Single slot part
 
 Basic usage:
 
 ```bash copy
-pnpm hardhat metadata:slotPart NAME [--description <STRING>] [--fallback-media-uri <STRING>]
+pnpm hardhat metadata:slot-part NAME [--description <STRING>] [--fallback-media-uri <STRING>]
 ```
 
 Example with no fallback:
 
 ```bash copy
-pnpm hardhat metadata:slotPart "Left Wing Item" --description "A slot on the left wing to hold items"
+pnpm hardhat metadata:slot-part "Left Wing Item" --description "A slot on the left wing to hold items"
 ```
 
 Example with fallback, rendered if nothing is equipped in the slot:
 
 ```bash copy
-pnpm hardhat metadata:slotPart "Background" --fallback-media-uri "ipfs://fallback-image-uri"
+pnpm hardhat metadata:slot-part "Background" --fallback-media-uri "ipfs://fallback-image-uri"
 ```
 
-See `pnpm hardhat metadata:slotPart --help` for a detailed list of arguments.
+See `pnpm hardhat metadata:slot-part --help` for a detailed list of arguments.
+
+#### Multiple slot parts from csv
+
+You can also create the metadata for multiple slot parts using a csv file. See 'metadata/slot-parts.csv' for an example. This file is used by default but you can also pass a different path as an argument.
+
+Basic usage:
+```bash copy
+pnpm hardhat metadata:slot-parts-csv [CSV_FILE_PATH]
+```
+
+Example:
+```bash copy
+pnpm hardhat metadata:slot-parts-csv metadata/slot-parts.csv
+```
+
+See `pnpm hardhat metadata:slot-parts-csv --help` for a detailed list of arguments.
