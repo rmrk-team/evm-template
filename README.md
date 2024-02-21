@@ -165,7 +165,7 @@ See `pnpm hardhat metadata:collections-csv --help` for a detailed list of argume
 Basic usage:
 
 ```bash copy
-pnpm hardhat metadata:token COLLECTION_SLUG TOKEN_ID NAME DESCRIPTION MEDIA_URI [--animation-uri <STRING>] [--attributes <STRING>] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>] [--thumbnail-uri <STRING>]
+pnpm hardhat metadata:token COLLECTION_SLUG FILE_NAME NAME DESCRIPTION MEDIA_URI [--animation-uri <STRING>] [--attributes <STRING>] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>] [--thumbnail-uri <STRING>]
 ```
 
 Example:
@@ -199,13 +199,13 @@ See `pnpm hardhat metadata:tokens-csv --help` for a detailed list of arguments.
 Basic usage:
 
 ```bash copy
-pnpm hardhat metadata:asset COLLECTION_SLUG NAME DESCRIPTION MEDIA_URI [--attributes <STRING>] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>] [--thumbnail-uri <STRING>]
+pnpm hardhat metadata:asset COLLECTION_SLUG FILE_NAME NAME DESCRIPTION MEDIA_URI [--attributes <STRING>] [--external-uri <STRING>] [--license <STRING>] [--license-uri <STRING>] [--thumbnail-uri <STRING>]
 ```
 
 Example:
 
 ```bash copy
-pnpm hardhat metadata:asset backgrounds "Mystical Background" "A mystical background" "ipfs://token-image-uri" --attributes "Max units:number:1,Artist:string:winner"
+pnpm hardhat metadata:asset backgrounds 001 "Mystical Background" "A mystical background" "ipfs://token-image-uri" --attributes "Max units:number:1,Artist:string:winner"
 ```
 
 See `pnpm hardhat metadata:asset --help` for a detailed list of arguments.

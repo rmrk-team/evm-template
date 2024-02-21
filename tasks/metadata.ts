@@ -153,7 +153,13 @@ task('metadata:token', 'Creates the metadata for a token under the metadata/toke
     string,
     false,
   )
-  .addPositionalParam('id', 'Token Id.', undefined, int, false)
+  .addPositionalParam(
+    'filename',
+    'Used to name the metadata file, ".json" extension is automatically appended. It should the tokenId if tokenURI is enumerated.',
+    undefined,
+    int,
+    false,
+  )
   .addPositionalParam(
     'name',
     'Identifies the asset to which this NFT represents.',
@@ -208,7 +214,7 @@ task('metadata:token', 'Creates the metadata for a token under the metadata/toke
   .setAction(async (params) => {
     generateTokenMetadata(
       params.collectionSlug,
-      params.id,
+      params.filename,
       params.name,
       params.description,
       params.mediaUri,
@@ -227,6 +233,13 @@ task('metadata:asset', 'Creates the metadata for an asset under the metadata/ass
     'Used to group the metadata for a specific collection in a unique way. e.g. "dot-leap-badges".',
     undefined,
     string,
+    false,
+  )
+  .addPositionalParam(
+    'filename',
+    'Used to name the metadata file, ".json" extension is automatically appended.',
+    undefined,
+    int,
     false,
   )
   .addPositionalParam(
@@ -276,6 +289,7 @@ task('metadata:asset', 'Creates the metadata for an asset under the metadata/ass
   .setAction(async (params) => {
     generateAssetMetadata(
       params.collectionSlug,
+      params.filename,
       params.name,
       params.description,
       params.mediaUri,
@@ -385,7 +399,7 @@ task(
 
 task(
   'metadata:tokens-csv',
-  'Creates the metadata for tokens of a collection under the metadata/collections directory. The passed externalUri and license data will be used for all collections in the CSV. The CSV must have the EXACT following headers: id, name, description, mediaUri, thumbnailUri, animationUri, attributes.',
+  'Creates the metadata for tokens of a collection under the metadata/collections directory. The passed externalUri and license data will be used for all collections in the CSV. The CSV must have the EXACT following headers: filename, name, description, mediaUri, thumbnailUri, animationUri, attributes.',
 )
   .addPositionalParam(
     'collectionSlug',
@@ -430,7 +444,7 @@ task(
 
 task(
   'metadata:assets-csv',
-  'Creates the metadata for assets of a collection under the metadata/collections directory. The passed externalUri and license data will be used for all collections in the CSV. The CSV must have the EXACT following headers: name, description, mediaUri, thumbnailUri, animationUri, attributes.',
+  'Creates the metadata for assets of a collection under the metadata/collections directory. The passed externalUri and license data will be used for all collections in the CSV. The CSV must have the EXACT following headers: filename, name, description, mediaUri, thumbnailUri, animationUri, attributes.',
 )
   .addPositionalParam(
     'collectionSlug',
@@ -582,6 +596,7 @@ async function generateMultipleAssetMetadata(
   for await (const record of parser) {
     generateAssetMetadata(
       collectionSlug,
+      record.filename,
       record.name,
       record.description,
       record.mediaUri === '' ? '' : baseUri + record.mediaUri,
@@ -669,7 +684,7 @@ function generateCatalogMetadata(name: string, description: string): void {
 
 function generateTokenMetadata(
   collectionSlug: string,
-  id: number,
+  filename: string,
   name: string,
   description: string,
   mediaUri: string,
@@ -685,7 +700,6 @@ function generateTokenMetadata(
     fs.mkdirSync(dir, { recursive: true });
   }
 
-  const slugName = id + '.json';
   const metadata: TokenOrAssetMetadata = {
     name,
     description,
@@ -715,11 +729,12 @@ function generateTokenMetadata(
     });
   }
 
-  fs.writeFileSync(`${dir}/${slugName}`, JSON.stringify(metadata, null, 2));
+  fs.writeFileSync(`${dir}/${filename}'.json'`, JSON.stringify(metadata, null, 2));
 }
 
 function generateAssetMetadata(
   collectionSlug: string,
+  filename: string,
   name: string,
   description: string,
   mediaUri: string,
@@ -735,7 +750,6 @@ function generateAssetMetadata(
     fs.mkdirSync(dir, { recursive: true });
   }
 
-  const slugName = name.toLowerCase().replace(/\s/g, '-') + '.json';
   const metadata: TokenOrAssetMetadata = {
     name,
     description,
@@ -757,7 +771,7 @@ function generateAssetMetadata(
     });
   }
 
-  fs.writeFileSync(`${dir}/${slugName}`, JSON.stringify(metadata, null, 2));
+  fs.writeFileSync(`${dir}/${filename}.json`, JSON.stringify(metadata, null, 2));
 }
 
 function generateslotPartMetadata(
