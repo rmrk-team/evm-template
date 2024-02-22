@@ -566,7 +566,7 @@ async function generateMultipleTokenMetadata(
   for await (const record of parser) {
     generateTokenMetadata(
       collectionSlug,
-      record.id,
+      record.filename,
       record.name,
       record.description,
       record.mediaUri === '' ? '' : baseUri + record.mediaUri,
