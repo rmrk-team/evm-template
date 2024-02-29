@@ -146,16 +146,24 @@ const config: HardhatUserConfig = {
         network: 'shibuya',
         chainId: 81,
         urls: {
-          apiURL: 'https://blockscout.com/shibuya/api',
-          browserURL: 'https://blockscout.com/shibuya',
+          apiURL: 'https://shibuya.blockscout.com//api',
+          browserURL: 'https://shibuya.blockscout.com/',
         },
       },
       {
         network: 'astar',
         chainId: 592,
         urls: {
-          apiURL: 'https://blockscout.com/astar/api',
-          browserURL: 'https://blockscout.com/astar/',
+          apiURL: 'https://astar.blockscout.com/api',
+          browserURL: 'https://astar.blockscout.com/',
+        },
+      },
+      {
+        network: 'zkatana',
+        chainId: 1261120,
+        urls: {
+          apiURL: 'https://zkatana.blockscout.com/api',
+          browserURL: 'https://zkatana.blockscout.com',
         },
       },
     ],
