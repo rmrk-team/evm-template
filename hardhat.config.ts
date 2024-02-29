@@ -146,7 +146,7 @@ const config: HardhatUserConfig = {
         network: 'shibuya',
         chainId: 81,
         urls: {
-          apiURL: 'https://shibuya.blockscout.com//api',
+          apiURL: 'https://shibuya.blockscout.com/api',
           browserURL: 'https://shibuya.blockscout.com/',
         },
       },
