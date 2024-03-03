@@ -17,7 +17,7 @@ import {
 } from "@rmrk-team/evm-contracts/contracts/RMRK/utils/RMRKBulkWriter.sol";
 import {
     RMRKCatalogImpl
-} from "@rmrk-team/evm-contracts/contracts/implementations/RMRKCatalogImpl.sol";
+} from "@rmrk-team/evm-contracts/contracts/implementations/catalog/RMRKCatalogImpl.sol";
 
 import {
     RMRKTokenAttributesRepository

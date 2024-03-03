@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@rmrk-team/evm-contracts':
-    specifier: ^2.4.3
-    version: 2.4.3
+    specifier: ^2.5.1
+    version: 2.5.1
 
 devDependencies:
   '@nomicfoundation/hardhat-chai-matchers':
@@ -990,6 +990,10 @@ packages:
     resolution: {integrity: sha512-yQJaT5HDp9hYOOp4jTYxMsR02gdFZFXhewX5HW9Jo4fsqSVqqyIO/xTHdWDaKX5a3pv1txmf076Lziz+sO7L1w==}
     dev: true
 
+  /@openzeppelin/contracts@5.0.2:
+    resolution: {integrity: sha512-ytPc6eLGcHHnapAZ9S+5qsdomhjo6QBHTDRRBFfTxXIpsicMhVPouPgmUPebZZZGX7vt9USA+Z+0M0dSVtSUEA==}
+    dev: false
+
   /@pkgr/core@0.1.1:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -1005,9 +1009,11 @@ packages:
       squirrelly: 8.0.8
     dev: true
 
-  /@rmrk-team/evm-contracts@2.4.3:
-    resolution: {integrity: sha512-d/uEgXRtKll51dTTMAAFZjs3YOzyuiQfoxQu2/i2fUjTU9qCKAHam8S7rHohmRF9EF0jBUBqH0xROrkI1Nrz1w==}
+  /@rmrk-team/evm-contracts@2.5.1:
+    resolution: {integrity: sha512-qdOBtEEO928EVeXqJuf3xX2zfxYa2MaKIUBWwUS0BGs1eVH4W9sWzBZCOdsUvnnPVyUx2UxojR66Xjugye4HuQ==}
     engines: {node: '>=18'}
+    dependencies:
+      '@openzeppelin/contracts': 5.0.2
     dev: false
 
   /@scure/base@1.1.5:

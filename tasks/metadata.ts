@@ -1,5 +1,4 @@
 import { string, int } from 'hardhat/internal/core/params/argumentTypes';
-import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { task } from 'hardhat/config';
 import fs from 'fs';
 import { parse } from 'csv-parse';
