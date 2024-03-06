@@ -156,7 +156,7 @@ task('metadata:token', 'Creates the metadata for a token under the metadata/toke
     'filename',
     'Used to name the metadata file, ".json" extension is automatically appended. It should the tokenId if tokenURI is enumerated.',
     undefined,
-    int,
+    string,
     false,
   )
   .addPositionalParam(
@@ -238,7 +238,7 @@ task('metadata:asset', 'Creates the metadata for an asset under the metadata/ass
     'filename',
     'Used to name the metadata file, ".json" extension is automatically appended.',
     undefined,
-    int,
+    string,
     false,
   )
   .addPositionalParam(
