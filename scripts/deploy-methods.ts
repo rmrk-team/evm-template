@@ -6,6 +6,7 @@ import {
   RMRKCatalogUtils,
   RMRKCollectionUtils,
   RMRKEquipRenderUtils,
+  RMRKRoyaltiesSplitter,
 } from '../typechain-types';
 
 export async function deployBulkWriter(): Promise<RMRKBulkWriter> {
@@ -64,6 +65,20 @@ export async function deployCatalog(
 
   await verifyIfNotHardhat(catalogAddress, [catalogMetadataUri, catalogType]);
   return catalog;
+}
+
+export async function deployRoyaltiesSplitter(
+  beneficiaries: string[],
+  sharesBPS: number[],
+): Promise<RMRKRoyaltiesSplitter> {
+  const splitterFactory = await ethers.getContractFactory('RMRKRoyaltiesSplitter');
+  const splitter = await splitterFactory.deploy(beneficiaries, sharesBPS);
+  await splitter.waitForDeployment();
+  const splitterAddress = await splitter.getAddress();
+  console.log('RoyaltiesSplitter deployed to:', splitterAddress);
+
+  await verifyIfNotHardhat(splitterAddress, [beneficiaries, sharesBPS]);
+  return splitter;
 }
 
 async function verifyIfNotHardhat(contractAddress: string, args: any[] = []) {
