@@ -54,7 +54,7 @@ task('attributes:set', 'Sets an attribute for a token in the collection')
     await setAttribute(
       tokenAttributes,
       params.collection,
-      params.tokenId,
+      BigInt(params.tokenId),
       params.attributesKey,
       params.type,
       params.value,
@@ -78,7 +78,7 @@ task(
     await setAttributeForMultipleTokens(
       tokenAttributes,
       params.collection,
-      params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
+      params.tokenIds.split(',').map((id: string) => BigInt(id.trim())),
       params.attributesKey,
       params.type,
       params.value,
@@ -102,7 +102,7 @@ task(
     await setMultipleAttributeForToken(
       tokenAttributes,
       params.collection,
-      params.tokenId,
+      BigInt(params.tokenId),
       params.attributesKeys.split(',').map((key: string) => key.trim()),
       params.type,
       params.values.split(',').map((value: string) => value.trim()),
@@ -133,7 +133,7 @@ task(
     await setMultipleAttributesForMultipleTokens(
       tokenAttributes,
       params.collection,
-      params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
+      params.tokenIds.split(',').map((id: string) => BigInt(id.trim())),
       params.attributesKeys.split(',').map((key: string) => key.trim()),
       params.type,
       params.values.split(',').map((value: string) => value.trim()),
@@ -151,13 +151,14 @@ task('attributes:get', 'Gets attribute for a token in the collection')
   .addPositionalParam('attributesKey', 'Attribute Keys')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
     const tokenAttributes = await getAttributesRepository(hre);
-    await getAttribute(
+    const result = await getAttribute(
       tokenAttributes,
       params.collection,
-      params.tokenId,
+      BigInt(params.tokenId),
       params.type,
       params.attributesKey,
     );
+    console.log(result);
   });
 
 task('attributes:get-multiple-tokens', 'Gets attribute for multiple tokens in the same collection')
@@ -170,13 +171,21 @@ task('attributes:get-multiple-tokens', 'Gets attribute for multiple tokens in th
   .addPositionalParam('attributesKey', 'Attribute Keys')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
     const tokenAttributes = await getAttributesRepository(hre);
-    await getAttributeForMultipleTokens(
+    const result = await getAttributeForMultipleTokens(
       tokenAttributes,
       params.collection,
-      params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
+      params.tokenIds.split(',').map((id: string) => BigInt(id.trim())),
       params.type,
       params.attributesKey,
     );
+    // Replace bigint values for string, so json can format it
+    const parsedResults = result.map((item) => {
+      return {
+        tokenId: item.tokenId.toString(),
+        value: typeof item.value === 'bigint' ? item.value.toString() : item.value,
+      };
+    });
+    console.log(JSON.stringify(parsedResults, null, 2));
   });
 
 task('attributes:get-multiple-attributes', 'Gets multiple attribute for a token in the collection')
@@ -189,13 +198,21 @@ task('attributes:get-multiple-attributes', 'Gets multiple attribute for a token 
   .addPositionalParam('attributesKeys', 'Comma separated Attribute Keys. e.g: "key1,key2,key3"')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
     const tokenAttributes = await getAttributesRepository(hre);
-    await getMultipleAttributesForToken(
+    const result = await getMultipleAttributesForToken(
       tokenAttributes,
       params.collection,
-      params.tokenId,
+      BigInt(params.tokenId),
       params.type,
       params.attributesKeys.split(',').map((key: string) => key.trim()),
     );
+    // Replace bigint values for string, so json can format it
+    const parsedResults = result.map((item) => {
+      return {
+        key: item.key,
+        value: typeof item.value === 'bigint' ? item.value.toString() : item.value,
+      };
+    });
+    console.log(JSON.stringify(parsedResults, null, 2));
   });
 
 task(
@@ -218,17 +235,26 @@ task(
   )
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
     const tokenAttributes = await getAttributesRepository(hre);
-    await getMultipleAttributesForMultipleTokens(
+    const result = await getMultipleAttributesForMultipleTokens(
       tokenAttributes,
       params.collection,
-      params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
+      params.tokenIds.split(',').map((id: string) => BigInt(id.trim())),
       params.attributesKeys.split(',').map((key: string) => key.trim()),
       params.type,
       params.expand,
     );
+    // Replace bigint values for string, so json can format it
+    const parsedResults = result.map((item) => {
+      return {
+        tokenId: item.tokenId.toString(),
+        key: item.key,
+        value: typeof item.value === 'bigint' ? item.value.toString() : item.value,
+      };
+    });
+    console.log(JSON.stringify(parsedResults, null, 2));
   });
 
-async function configureAttribute(
+export async function configureAttribute(
   tokenAttributes: RMRKTokenAttributesRepository,
   ownerAddress: string,
   collection: string,
@@ -259,10 +285,10 @@ async function configureAttribute(
   );
 }
 
-async function setAttribute(
+export async function setAttribute(
   tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
-  tokenId: number,
+  tokenId: bigint,
   attributesKey: string,
   type: string,
   value: string,
@@ -301,10 +327,10 @@ async function setAttribute(
   console.log(`Set attribute ${attributesKey} for token ${tokenId} in ${collection}`);
 }
 
-async function setAttributeForMultipleTokens(
+export async function setAttributeForMultipleTokens(
   tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
-  tokenIds: number[],
+  tokenIds: bigint[],
   attributesKey: string,
   type: string,
   value: string,
@@ -343,10 +369,10 @@ async function setAttributeForMultipleTokens(
   console.log(`Set attribute ${attributesKey} for multiple tokens in ${collection}`);
 }
 
-async function setMultipleAttributeForToken(
+export async function setMultipleAttributeForToken(
   tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
-  tokenId: number,
+  tokenId: bigint,
   attributesKeys: string[],
   type: string,
   values: string[],
@@ -409,10 +435,10 @@ async function setMultipleAttributeForToken(
   console.log(`Set multiple attributes for token ${tokenId} in ${collection}`);
 }
 
-async function setMultipleAttributesForMultipleTokens(
+export async function setMultipleAttributesForMultipleTokens(
   tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
-  tokenIds: number[],
+  tokenIds: bigint[],
   attributesKeys: string[],
   type: string,
   values: string[],
@@ -484,11 +510,11 @@ async function setMultipleAttributesForMultipleTokens(
 
 function getExpandedTokenIdsAndAttributes(
   expand: boolean,
-  tokenIds: number[],
+  tokenIds: bigint[],
   attributesKeys: string[],
 ) {
   if (expand) {
-    const expandedTokenIds: number[] = [];
+    const expandedTokenIds: bigint[] = [];
     const expandedAttributesKeys: string[] = [];
     for (let i = 0; i < tokenIds.length; i++) {
       for (let j = 0; j < attributesKeys.length; j++) {
@@ -502,133 +528,118 @@ function getExpandedTokenIdsAndAttributes(
   return { tokenIds, attributesKeys };
 }
 
-async function getAttribute(
+export async function getAttribute(
   tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
-  tokenId: number,
+  tokenId: bigint,
   type: string,
   attributesKey: string,
-): Promise<void> {
+): Promise<boolean | bigint | string> {
   console.log(`Getting attribute ${attributesKey} for token ${tokenId} in ${collection}`);
   switch (type) {
     case 'boolean':
       const boolValue = await tokenAttributes.getBoolAttribute(collection, tokenId, attributesKey);
-      console.log(boolValue);
-      break;
+      return boolValue;
     case 'int':
       const intValue = await tokenAttributes.getUintAttribute(collection, tokenId, attributesKey);
-      console.log(intValue);
-      break;
+      return intValue;
     case 'string':
       const stringValue = await tokenAttributes.getStringAttribute(
         collection,
         tokenId,
         attributesKey,
       );
-      console.log(stringValue);
-      break;
+      return stringValue;
     case 'address':
       const addressValue = await tokenAttributes.getAddressAttribute(
         collection,
         tokenId,
         attributesKey,
       );
-      console.log(addressValue);
-      break;
+      return addressValue;
     case 'bytes':
       const bytesValue = await tokenAttributes.getBytesAttribute(
         collection,
         tokenId,
         attributesKey,
       );
-      console.log(bytesValue);
-      break;
+      return bytesValue;
     default:
       throw new Error('Invalid attribute type');
   }
 }
 
-async function getAttributeForMultipleTokens(
+export async function getAttributeForMultipleTokens(
   tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
-  tokenIds: number[],
+  tokenIds: bigint[],
   type: string,
   attributesKey: string,
-): Promise<void> {
+): Promise<{ tokenId: bigint; value: boolean | bigint | string }[]> {
   console.log(`Getting attribute ${attributesKey} for multiple tokenIds in ${collection}`);
   switch (type) {
     case 'boolean':
       const boolValues = await tokenAttributes.getBoolAttributes([collection], tokenIds, [
         attributesKey,
       ]);
-      const mappedBools = tokenIds.map((id, index) => {
+      return tokenIds.map((id, index) => {
         return {
           tokenId: id,
           value: boolValues[index],
         };
       });
-      console.log(JSON.stringify(mappedBools, null, 2));
-      break;
     case 'int':
       const intValues = await tokenAttributes.getUintAttributes([collection], tokenIds, [
         attributesKey,
       ]);
-      const mappedInts = tokenIds.map((id, index) => {
+      return tokenIds.map((id, index) => {
         return {
           tokenId: id,
-          value: Number(intValues[index]), // If too big, we should parse to string
+          value: intValues[index],
         };
       });
-      console.log(JSON.stringify(mappedInts, null, 2));
-      break;
     case 'string':
       const stringValues = await tokenAttributes.getStringAttributes([collection], tokenIds, [
         attributesKey,
       ]);
-      const mappedStrings = tokenIds.map((id, index) => {
+      return tokenIds.map((id, index) => {
         return {
           tokenId: id,
           value: stringValues[index],
         };
       });
-      console.log(JSON.stringify(mappedStrings, null, 2));
-      break;
     case 'address':
       const addressValues = await tokenAttributes.getAddressAttributes([collection], tokenIds, [
         attributesKey,
       ]);
-      const mappedAddresses = tokenIds.map((id, index) => {
+      return tokenIds.map((id, index) => {
         return {
           tokenId: id,
           value: addressValues[index],
         };
       });
-      console.log(JSON.stringify(mappedAddresses, null, 2));
-      break;
     case 'bytes':
       const bytesValues = await tokenAttributes.getBytesAttributes([collection], tokenIds, [
         attributesKey,
       ]);
-      const mappedBytes = tokenIds.map((id, index) => {
+      return tokenIds.map((id, index) => {
         return {
           tokenId: id,
           value: bytesValues[index],
         };
       });
-      console.log(JSON.stringify(mappedBytes, null, 2));
-      break;
     default:
       throw new Error('Invalid attribute type');
   }
 }
 
-async function getMultipleAttributesForToken(
+export async function getMultipleAttributesForToken(
   tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
-  tokenId: number,
+  tokenId: bigint,
   type: string,
   attributesKeys: string[],
-): Promise<void> {
+): Promise<{ key: string; value: boolean | bigint | string }[]> {
   console.log(`Getting multiple attributes for token ${tokenId} in ${collection}`);
   switch (type) {
     case 'boolean':
@@ -637,83 +648,73 @@ async function getMultipleAttributesForToken(
         [tokenId],
         attributesKeys,
       );
-      const mappedBools = attributesKeys.map((key, index) => {
+      return attributesKeys.map((key, index) => {
         return {
           key: key,
           value: boolValues[index],
         };
       });
-      console.log(JSON.stringify(mappedBools, null, 2));
-      break;
     case 'int':
       const intValues = await tokenAttributes.getUintAttributes(
         [collection],
         [tokenId],
         attributesKeys,
       );
-      const mappedInts = attributesKeys.map((key, index) => {
+      return attributesKeys.map((key, index) => {
         return {
           key: key,
-          value: Number(intValues[index]), // If too big, we should parse to string
+          value: intValues[index],
         };
       });
-      console.log(JSON.stringify(mappedInts, null, 2));
-      break;
     case 'string':
       const stringValues = await tokenAttributes.getStringAttributes(
         [collection],
         [tokenId],
         attributesKeys,
       );
-      const mappedStrings = attributesKeys.map((key, index) => {
+      return attributesKeys.map((key, index) => {
         return {
           key: key,
           value: stringValues[index],
         };
       });
-      console.log(JSON.stringify(mappedStrings, null, 2));
-      break;
     case 'address':
       const addressValues = await tokenAttributes.getAddressAttributes(
         [collection],
         [tokenId],
         attributesKeys,
       );
-      const mappedAddresses = attributesKeys.map((key, index) => {
+      return attributesKeys.map((key, index) => {
         return {
           key: key,
           value: addressValues[index],
         };
       });
-      console.log(JSON.stringify(mappedAddresses, null, 2));
-      break;
     case 'bytes':
       const bytesValues = await tokenAttributes.getBytesAttributes(
         [collection],
         [tokenId],
         attributesKeys,
       );
-      const mappedBytes = attributesKeys.map((key, index) => {
+      return attributesKeys.map((key, index) => {
         return {
           key: key,
           value: bytesValues[index],
         };
       });
-      console.log(JSON.stringify(mappedBytes, null, 2));
-      break;
     default:
       throw new Error('Invalid attribute type');
   }
 }
 
-async function getMultipleAttributesForMultipleTokens(
+export async function getMultipleAttributesForMultipleTokens(
   tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
-  tokenIds: number[],
+  tokenIds: bigint[],
   attributesKeys: string[],
   type: string,
   expand: boolean,
-): Promise<void> {
+): Promise<{ tokenId: bigint; key: string; value: boolean | bigint | string }[]> {
   console.log('Getting multiple attributes for multiple tokens in the same collection');
   ({ tokenIds, attributesKeys } = getExpandedTokenIdsAndAttributes(
     expand,
@@ -732,75 +733,65 @@ async function getMultipleAttributesForMultipleTokens(
         tokenIds,
         attributesKeys,
       );
-      const mappedBools = attributesKeys.map((key, index) => {
+      return attributesKeys.map((key, index) => {
         return {
           tokenId: tokenIds[index],
           key: key,
           value: boolValues[index],
         };
       });
-      console.log(JSON.stringify(mappedBools, null, 2));
-      break;
     case 'int':
       const intValues = await tokenAttributes.getUintAttributes(
         [collection],
         tokenIds,
         attributesKeys,
       );
-      const mappedInts = attributesKeys.map((key, index) => {
+      return attributesKeys.map((key, index) => {
         return {
           tokenId: tokenIds[index],
           key: key,
-          value: Number(intValues[index]), // If too big, we should parse to string
+          value: intValues[index],
         };
       });
-      console.log(JSON.stringify(mappedInts, null, 2));
-      break;
     case 'string':
       const stringValues = await tokenAttributes.getStringAttributes(
         [collection],
         tokenIds,
         attributesKeys,
       );
-      const mappedStrings = attributesKeys.map((key, index) => {
+      return attributesKeys.map((key, index) => {
         return {
           tokenId: tokenIds[index],
           key: key,
           value: stringValues[index],
         };
       });
-      console.log(JSON.stringify(mappedStrings, null, 2));
-      break;
     case 'address':
       const addressValues = await tokenAttributes.getAddressAttributes(
         [collection],
         tokenIds,
         attributesKeys,
       );
-      const mappedAddresses = attributesKeys.map((key, index) => {
+      return attributesKeys.map((key, index) => {
         return {
           tokenId: tokenIds[index],
           key: key,
           value: addressValues[index],
         };
       });
-      console.log(JSON.stringify(mappedAddresses, null, 2));
-      break;
     case 'bytes':
       const bytesValues = await tokenAttributes.getBytesAttributes(
         [collection],
         tokenIds,
         attributesKeys,
       );
-      const mappedBytes = attributesKeys.map((key, index) => {
+      return attributesKeys.map((key, index) => {
         return {
           tokenId: tokenIds[index],
           key: key,
           value: bytesValues[index],
         };
       });
-      console.log(JSON.stringify(mappedBytes, null, 2));
-      break;
     default:
       throw new Error('Invalid attribute type');
   }
