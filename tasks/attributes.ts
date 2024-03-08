@@ -3,6 +3,7 @@ import { getAttributesRepository } from './utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { task } from 'hardhat/config';
 import { ContractTransactionResponse } from 'ethers';
+import { RMRKTokenAttributesRepository } from '../typechain-types';
 
 task('attributes:configure', 'Registers access and configures attribute for the collection')
   .addPositionalParam('collection', 'Address of the collection')
@@ -26,8 +27,11 @@ task('attributes:configure', 'Registers access and configures attribute for the 
     true,
   )
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+    const tokenAttributes = await getAttributesRepository(hre);
+    const [deployer] = await hre.ethers.getSigners();
     await configureAttribute(
-      hre,
+      tokenAttributes,
+      deployer.address,
       params.collection,
       params.attributesKey,
       params.accessType,
@@ -46,8 +50,9 @@ task('attributes:set', 'Sets an attribute for a token in the collection')
   .addPositionalParam('attributesKey', 'Attribute Keys')
   .addPositionalParam('value', 'Value of the attribute, must be of the type specified.')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+    const tokenAttributes = await getAttributesRepository(hre);
     await setAttribute(
-      hre,
+      tokenAttributes,
       params.collection,
       params.tokenId,
       params.attributesKey,
@@ -69,13 +74,38 @@ task(
   .addPositionalParam('attributesKey', 'Attribute Keys')
   .addPositionalParam('value', 'Value of the attribute, must be of the type specified.')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+    const tokenAttributes = await getAttributesRepository(hre);
     await setAttributeForMultipleTokens(
-      hre,
+      tokenAttributes,
       params.collection,
       params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
       params.attributesKey,
       params.type,
       params.value,
+    );
+  });
+
+task(
+  'attributes:set-multiple-attributes',
+  'Sets the same attribute for multiple tokens in the collection',
+)
+  .addPositionalParam('collection', 'Address of the collection')
+  .addPositionalParam('tokenId', 'TokenId', undefined, int)
+  .addPositionalParam(
+    'type',
+    "Type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+  )
+  .addPositionalParam('attributesKeys', 'Comma separated Attribute Keys. e.g: "key1,key2,key3"')
+  .addPositionalParam('values', 'Comma separated values. e.g: "value1,value2,value3"')
+  .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+    const tokenAttributes = await getAttributesRepository(hre);
+    await setMultipleAttributeForToken(
+      tokenAttributes,
+      params.collection,
+      params.tokenId,
+      params.attributesKeys.split(',').map((key: string) => key.trim()),
+      params.type,
+      params.values.split(',').map((value: string) => value.trim()),
     );
   });
 
@@ -99,8 +129,9 @@ task(
     true,
   )
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+    const tokenAttributes = await getAttributesRepository(hre);
     await setMultipleAttributesForMultipleTokens(
-      hre,
+      tokenAttributes,
       params.collection,
       params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
       params.attributesKeys.split(',').map((key: string) => key.trim()),
@@ -119,7 +150,14 @@ task('attributes:get', 'Gets attribute for a token in the collection')
   )
   .addPositionalParam('attributesKey', 'Attribute Keys')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
-    await getAttribute(hre, params.collection, params.tokenId, params.type, params.attributesKey);
+    const tokenAttributes = await getAttributesRepository(hre);
+    await getAttribute(
+      tokenAttributes,
+      params.collection,
+      params.tokenId,
+      params.type,
+      params.attributesKey,
+    );
   });
 
 task('attributes:get-multiple-tokens', 'Gets attribute for multiple tokens in the same collection')
@@ -131,8 +169,9 @@ task('attributes:get-multiple-tokens', 'Gets attribute for multiple tokens in th
   )
   .addPositionalParam('attributesKey', 'Attribute Keys')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+    const tokenAttributes = await getAttributesRepository(hre);
     await getAttributeForMultipleTokens(
-      hre,
+      tokenAttributes,
       params.collection,
       params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
       params.type,
@@ -149,8 +188,9 @@ task('attributes:get-multiple-attributes', 'Gets multiple attribute for a token 
   )
   .addPositionalParam('attributesKeys', 'Comma separated Attribute Keys. e.g: "key1,key2,key3"')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+    const tokenAttributes = await getAttributesRepository(hre);
     await getMultipleAttributesForToken(
-      hre,
+      tokenAttributes,
       params.collection,
       params.tokenId,
       params.type,
@@ -177,8 +217,9 @@ task(
     true,
   )
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+    const tokenAttributes = await getAttributesRepository(hre);
     await getMultipleAttributesForMultipleTokens(
-      hre,
+      tokenAttributes,
       params.collection,
       params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
       params.attributesKeys.split(',').map((key: string) => key.trim()),
@@ -188,7 +229,8 @@ task(
   });
 
 async function configureAttribute(
-  hre: HardhatRuntimeEnvironment,
+  tokenAttributes: RMRKTokenAttributesRepository,
+  ownerAddress: string,
   collection: string,
   attributesKey: string,
   accessType: number,
@@ -198,12 +240,9 @@ async function configureAttribute(
   if (accessType === 4 && !specificAddress)
     throw new Error('Specific address is required for access type 4');
   if (accessType < 0 || accessType > 4) throw new Error('Invalid access type');
-  const [deployer] = await hre.ethers.getSigners();
-
-  const tokenAttributes = await getAttributesRepository(hre);
 
   if (firstTime) {
-    const tx = await tokenAttributes.registerAccessControl(collection, deployer.address, true);
+    const tx = await tokenAttributes.registerAccessControl(collection, ownerAddress, true);
     await tx.wait();
   }
 
@@ -216,19 +255,18 @@ async function configureAttribute(
   await tx.wait();
 
   console.log(
-    `Configured attribute ${attributesKey} for ${collection} on ${hre.network.name} blockchain...`,
+    `Configured attribute ${attributesKey} for ${collection}. Access type: ${accessType}`,
   );
 }
 
 async function setAttribute(
-  hre: HardhatRuntimeEnvironment,
+  tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
   tokenId: number,
   attributesKey: string,
   type: string,
   value: string,
 ): Promise<void> {
-  const tokenAttributes = await getAttributesRepository(hre);
   let tx: ContractTransactionResponse;
   switch (type) {
     case 'boolean':
@@ -264,14 +302,13 @@ async function setAttribute(
 }
 
 async function setAttributeForMultipleTokens(
-  hre: HardhatRuntimeEnvironment,
+  tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
   tokenIds: number[],
   attributesKey: string,
   type: string,
   value: string,
 ): Promise<void> {
-  const tokenAttributes = await getAttributesRepository(hre);
   let tx: ContractTransactionResponse;
   switch (type) {
     case 'boolean':
@@ -306,8 +343,74 @@ async function setAttributeForMultipleTokens(
   console.log(`Set attribute ${attributesKey} for multiple tokens in ${collection}`);
 }
 
+async function setMultipleAttributeForToken(
+  tokenAttributes: RMRKTokenAttributesRepository,
+  collection: string,
+  tokenId: number,
+  attributesKeys: string[],
+  type: string,
+  values: string[],
+): Promise<void> {
+  if (attributesKeys.length !== values.length)
+    throw new Error(
+      `Attributes (${attributesKeys.length}) and values (${values.length}) length must be the same`,
+    );
+  let tx: ContractTransactionResponse;
+  switch (type) {
+    case 'boolean':
+      tx = await tokenAttributes.setBoolAttributes(
+        [collection],
+        [tokenId],
+        attributesKeys.map((key, index) => {
+          return { key, value: Boolean(values[index]) };
+        }),
+      );
+      break;
+    case 'int':
+      tx = await tokenAttributes.setUintAttributes(
+        [collection],
+        [tokenId],
+        attributesKeys.map((key, index) => {
+          return { key, value: parseInt(values[index]) };
+        }),
+      );
+      break;
+    case 'string':
+      tx = await tokenAttributes.setStringAttributes(
+        [collection],
+        [tokenId],
+        attributesKeys.map((key, index) => {
+          return { key, value: values[index] };
+        }),
+      );
+      break;
+    case 'address':
+      tx = await tokenAttributes.setAddressAttributes(
+        [collection],
+        [tokenId],
+        attributesKeys.map((key, index) => {
+          return { key, value: values[index] };
+        }),
+      );
+      break;
+    case 'bytes':
+      tx = await tokenAttributes.setBytesAttributes(
+        [collection],
+        [tokenId],
+        attributesKeys.map((key, index) => {
+          return { key, value: values[index] };
+        }),
+      );
+      break;
+    default:
+      throw new Error('Invalid attribute type');
+  }
+  await tx.wait();
+  console.log(`Set multiple attributes for token ${tokenId} in ${collection}`);
+}
+
 async function setMultipleAttributesForMultipleTokens(
-  hre: HardhatRuntimeEnvironment,
+  tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
   tokenIds: number[],
   attributesKeys: string[],
@@ -325,7 +428,6 @@ async function setMultipleAttributesForMultipleTokens(
       `Attributes (${attributesKeys.length}), values (${values.length}) and tokenIds (${tokenIds.length}) length must be the same`,
     );
 
-  const tokenAttributes = await getAttributesRepository(hre);
   let tx: ContractTransactionResponse;
   switch (type) {
     case 'boolean':
@@ -401,13 +503,12 @@ function getExpandedTokenIdsAndAttributes(
 }
 
 async function getAttribute(
-  hre: HardhatRuntimeEnvironment,
+  tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
   tokenId: number,
   type: string,
   attributesKey: string,
 ): Promise<void> {
-  const tokenAttributes = await getAttributesRepository(hre);
   console.log(`Getting attribute ${attributesKey} for token ${tokenId} in ${collection}`);
   switch (type) {
     case 'boolean':
@@ -448,13 +549,12 @@ async function getAttribute(
 }
 
 async function getAttributeForMultipleTokens(
-  hre: HardhatRuntimeEnvironment,
+  tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
   tokenIds: number[],
   type: string,
   attributesKey: string,
 ): Promise<void> {
-  const tokenAttributes = await getAttributesRepository(hre);
   console.log(`Getting attribute ${attributesKey} for multiple tokenIds in ${collection}`);
   switch (type) {
     case 'boolean':
@@ -523,13 +623,12 @@ async function getAttributeForMultipleTokens(
 }
 
 async function getMultipleAttributesForToken(
-  hre: HardhatRuntimeEnvironment,
+  tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
   tokenId: number,
   type: string,
   attributesKeys: string[],
 ): Promise<void> {
-  const tokenAttributes = await getAttributesRepository(hre);
   console.log(`Getting multiple attributes for token ${tokenId} in ${collection}`);
   switch (type) {
     case 'boolean':
@@ -608,7 +707,7 @@ async function getMultipleAttributesForToken(
 }
 
 async function getMultipleAttributesForMultipleTokens(
-  hre: HardhatRuntimeEnvironment,
+  tokenAttributes: RMRKTokenAttributesRepository,
   collection: string,
   tokenIds: number[],
   attributesKeys: string[],
@@ -625,7 +724,6 @@ async function getMultipleAttributesForMultipleTokens(
     throw new Error(
       `Attributes (${attributesKeys.length}) and tokenIds (${tokenIds.length}) length must be the same`,
     );
-  const tokenAttributes = await getAttributesRepository(hre);
   console.log(`Getting multiple attributes for multiple tokens in ${collection}`);
   switch (type) {
     case 'boolean':
