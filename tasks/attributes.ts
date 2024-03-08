@@ -36,7 +36,7 @@ task('attributes:configure', 'Registers access and configures attribute for the 
     );
   });
 
-task('attributes:set', 'Sets attribute for a token in the collection')
+task('attributes:set', 'Sets an attribute for a token in the collection')
   .addPositionalParam('collection', 'Address of the collection')
   .addPositionalParam('tokenId', 'TokenId', undefined, int)
   .addPositionalParam(
@@ -72,10 +72,41 @@ task(
     await setAttributeForMultipleTokens(
       hre,
       params.collection,
-      params.tokenIds.split(',').tri.map((id: string) => parseInt(id.trim())),
+      params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
       params.attributesKey,
       params.type,
       params.value,
+    );
+  });
+
+task(
+  'attributes:set-multiple-attributes-multiple-tokens',
+  'Sets multiple attributes for multiple tokens in the same collection',
+)
+  .addPositionalParam('collection', 'Address of the collection')
+  .addPositionalParam('tokenIds', 'Comma separated TokenIds. e.g: "1,2,3"')
+  .addPositionalParam(
+    'type',
+    "Type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+  )
+  .addPositionalParam('attributesKeys', 'Comma separated Attribute Keys. e.g: "key1,key2,key3"')
+  .addPositionalParam('values', 'Comma separated values. e.g: "value1,value2,value3"')
+  .addParam(
+    'expand',
+    'If you setting the same attributes for the same tokens, set this to true and you do not need to set both values multiple times. e.g: tokenids: "1,1,1,2,2,2" and attributes: "key1,key2,key3,key1,key2,key3", becomes tokenids: "1,2" and attributes: "key1,key2,key3". Tokens are expanded first, so values must be "valueToken1Key1,valueToken1Key2,valueToken1Key3,valueToken2Key1,valueToken2Key2,valueToken2Key3"',
+    false,
+    boolean,
+    true,
+  )
+  .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+    await setMultipleAttributesForMultipleTokens(
+      hre,
+      params.collection,
+      params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
+      params.attributesKeys.split(',').map((key: string) => key.trim()),
+      params.type,
+      params.values.split(',').map((value: string) => value.trim()),
+      params.expand,
     );
   });
 
@@ -103,7 +134,7 @@ task('attributes:get-multiple-tokens', 'Gets attribute for multiple tokens in th
     await getAttributeForMultipleTokens(
       hre,
       params.collection,
-      params.tokenIds.split(',').tri.map((id: string) => parseInt(id.trim())),
+      params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
       params.type,
       params.attributesKey,
     );
@@ -116,7 +147,7 @@ task('attributes:get-multiple-attributes', 'Gets multiple attribute for a token 
     'type',
     "Type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
   )
-  .addPositionalParam('attributesKeys', 'Address of the collection')
+  .addPositionalParam('attributesKeys', 'Comma separated Attribute Keys. e.g: "key1,key2,key3"')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
     await getMultipleAttributesForToken(
       hre,
@@ -124,6 +155,35 @@ task('attributes:get-multiple-attributes', 'Gets multiple attribute for a token 
       params.tokenId,
       params.type,
       params.attributesKeys.split(',').map((key: string) => key.trim()),
+    );
+  });
+
+task(
+  'attributes:get-multiple-attributes-multiple-tokens',
+  'Gets multiple attribute for multiple tokens in the collection',
+)
+  .addPositionalParam('collection', 'Address of the collection')
+  .addPositionalParam('tokenIds', 'Comma separated TokenIds. e.g: "1,2,3"')
+  .addPositionalParam(
+    'type',
+    "Type of the attributes, must apply to all. Options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+  )
+  .addPositionalParam('attributesKeys', 'Comma separated Attribute Keys. e.g: "key1,key2,key3"')
+  .addParam(
+    'expand',
+    'If you getting the same attributes for the same tokens, set this to true and you do not need to set both values multiple times. e.g: tokenids: "1,1,1,2,2,2" and attributes: "key1,key2,key3,key1,key2,key3", becomes tokenids: "1,2" and attributes: "key1,key2,key3". Tokens are expanded first, so values must be "valueToken1Key1,valueToken1Key2,valueToken1Key3,valueToken2Key1,valueToken2Key2,valueToken2Key3"',
+    false,
+    boolean,
+    true,
+  )
+  .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
+    await getMultipleAttributesForMultipleTokens(
+      hre,
+      params.collection,
+      params.tokenIds.split(',').map((id: string) => parseInt(id.trim())),
+      params.attributesKeys.split(',').map((key: string) => key.trim()),
+      params.type,
+      params.expand,
     );
   });
 
@@ -246,6 +306,100 @@ async function setAttributeForMultipleTokens(
   console.log(`Set attribute ${attributesKey} for multiple tokens in ${collection}`);
 }
 
+async function setMultipleAttributesForMultipleTokens(
+  hre: HardhatRuntimeEnvironment,
+  collection: string,
+  tokenIds: number[],
+  attributesKeys: string[],
+  type: string,
+  values: string[],
+  expand: boolean,
+): Promise<void> {
+  ({ tokenIds, attributesKeys } = getExpandedTokenIdsAndAttributes(
+    expand,
+    tokenIds,
+    attributesKeys,
+  ));
+  if (attributesKeys.length !== values.length || attributesKeys.length !== tokenIds.length)
+    throw new Error(
+      `Attributes (${attributesKeys.length}), values (${values.length}) and tokenIds (${tokenIds.length}) length must be the same`,
+    );
+
+  const tokenAttributes = await getAttributesRepository(hre);
+  let tx: ContractTransactionResponse;
+  switch (type) {
+    case 'boolean':
+      tx = await tokenAttributes.setBoolAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys.map((key, index) => {
+          return { key, value: Boolean(values[index]) };
+        }),
+      );
+      break;
+    case 'int':
+      tx = await tokenAttributes.setUintAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys.map((key, index) => {
+          return { key, value: parseInt(values[index]) };
+        }),
+      );
+      break;
+    case 'string':
+      tx = await tokenAttributes.setStringAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys.map((key, index) => {
+          return { key, value: values[index] };
+        }),
+      );
+      break;
+    case 'address':
+      tx = await tokenAttributes.setAddressAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys.map((key, index) => {
+          return { key, value: values[index] };
+        }),
+      );
+      break;
+    case 'bytes':
+      tx = await tokenAttributes.setBytesAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys.map((key, index) => {
+          return { key, value: values[index] };
+        }),
+      );
+      break;
+    default:
+      throw new Error('Invalid attribute type');
+  }
+  await tx.wait();
+  console.log(`Set multiple attributes for multiple tokens in ${collection}`);
+}
+
+function getExpandedTokenIdsAndAttributes(
+  expand: boolean,
+  tokenIds: number[],
+  attributesKeys: string[],
+) {
+  if (expand) {
+    const expandedTokenIds: number[] = [];
+    const expandedAttributesKeys: string[] = [];
+    for (let i = 0; i < tokenIds.length; i++) {
+      for (let j = 0; j < attributesKeys.length; j++) {
+        expandedTokenIds.push(tokenIds[i]);
+        expandedAttributesKeys.push(attributesKeys[j]);
+      }
+    }
+    tokenIds = expandedTokenIds;
+    attributesKeys = expandedAttributesKeys;
+  }
+  return { tokenIds, attributesKeys };
+}
+
 async function getAttribute(
   hre: HardhatRuntimeEnvironment,
   collection: string,
@@ -361,8 +515,8 @@ async function getAttributeForMultipleTokens(
           value: bytesValues[index],
         };
       });
-      break;
       console.log(JSON.stringify(mappedBytes, null, 2));
+      break;
     default:
       throw new Error('Invalid attribute type');
   }
@@ -442,6 +596,107 @@ async function getMultipleAttributesForToken(
       );
       const mappedBytes = attributesKeys.map((key, index) => {
         return {
+          key: key,
+          value: bytesValues[index],
+        };
+      });
+      console.log(JSON.stringify(mappedBytes, null, 2));
+      break;
+    default:
+      throw new Error('Invalid attribute type');
+  }
+}
+
+async function getMultipleAttributesForMultipleTokens(
+  hre: HardhatRuntimeEnvironment,
+  collection: string,
+  tokenIds: number[],
+  attributesKeys: string[],
+  type: string,
+  expand: boolean,
+): Promise<void> {
+  console.log('Getting multiple attributes for multiple tokens in the same collection');
+  ({ tokenIds, attributesKeys } = getExpandedTokenIdsAndAttributes(
+    expand,
+    tokenIds,
+    attributesKeys,
+  ));
+  if (attributesKeys.length !== tokenIds.length)
+    throw new Error(
+      `Attributes (${attributesKeys.length}) and tokenIds (${tokenIds.length}) length must be the same`,
+    );
+  const tokenAttributes = await getAttributesRepository(hre);
+  console.log(`Getting multiple attributes for multiple tokens in ${collection}`);
+  switch (type) {
+    case 'boolean':
+      const boolValues = await tokenAttributes.getBoolAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys,
+      );
+      const mappedBools = attributesKeys.map((key, index) => {
+        return {
+          tokenId: tokenIds[index],
+          key: key,
+          value: boolValues[index],
+        };
+      });
+      console.log(JSON.stringify(mappedBools, null, 2));
+      break;
+    case 'int':
+      const intValues = await tokenAttributes.getUintAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys,
+      );
+      const mappedInts = attributesKeys.map((key, index) => {
+        return {
+          tokenId: tokenIds[index],
+          key: key,
+          value: Number(intValues[index]), // If too big, we should parse to string
+        };
+      });
+      console.log(JSON.stringify(mappedInts, null, 2));
+      break;
+    case 'string':
+      const stringValues = await tokenAttributes.getStringAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys,
+      );
+      const mappedStrings = attributesKeys.map((key, index) => {
+        return {
+          tokenId: tokenIds[index],
+          key: key,
+          value: stringValues[index],
+        };
+      });
+      console.log(JSON.stringify(mappedStrings, null, 2));
+      break;
+    case 'address':
+      const addressValues = await tokenAttributes.getAddressAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys,
+      );
+      const mappedAddresses = attributesKeys.map((key, index) => {
+        return {
+          tokenId: tokenIds[index],
+          key: key,
+          value: addressValues[index],
+        };
+      });
+      console.log(JSON.stringify(mappedAddresses, null, 2));
+      break;
+    case 'bytes':
+      const bytesValues = await tokenAttributes.getBytesAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys,
+      );
+      const mappedBytes = attributesKeys.map((key, index) => {
+        return {
+          tokenId: tokenIds[index],
           key: key,
           value: bytesValues[index],
         };
