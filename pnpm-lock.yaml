@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@rmrk-team/evm-contracts':
-    specifier: ^2.5.1
-    version: 2.5.1
+    specifier: ^2.5.2
+    version: 2.5.2
 
 devDependencies:
   '@nomicfoundation/hardhat-chai-matchers':
@@ -26,8 +26,8 @@ devDependencies:
     specifier: ^2.0.3
     version: 2.0.3(hardhat@2.19.4)
   '@openzeppelin/contracts':
-    specifier: ^5.0.1
-    version: 5.0.1
+    specifier: ^5.0.2
+    version: 5.0.2
   '@primitivefi/hardhat-dodoc':
     specifier: ^0.2.3
     version: 0.2.3(hardhat@2.19.4)(squirrelly@8.0.8)
@@ -986,13 +986,8 @@ packages:
       '@nomicfoundation/solidity-analyzer-win32-x64-msvc': 0.1.1
     dev: true
 
-  /@openzeppelin/contracts@5.0.1:
-    resolution: {integrity: sha512-yQJaT5HDp9hYOOp4jTYxMsR02gdFZFXhewX5HW9Jo4fsqSVqqyIO/xTHdWDaKX5a3pv1txmf076Lziz+sO7L1w==}
-    dev: true
-
   /@openzeppelin/contracts@5.0.2:
     resolution: {integrity: sha512-ytPc6eLGcHHnapAZ9S+5qsdomhjo6QBHTDRRBFfTxXIpsicMhVPouPgmUPebZZZGX7vt9USA+Z+0M0dSVtSUEA==}
-    dev: false
 
   /@pkgr/core@0.1.1:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
@@ -1009,8 +1004,8 @@ packages:
       squirrelly: 8.0.8
     dev: true
 
-  /@rmrk-team/evm-contracts@2.5.1:
-    resolution: {integrity: sha512-qdOBtEEO928EVeXqJuf3xX2zfxYa2MaKIUBWwUS0BGs1eVH4W9sWzBZCOdsUvnnPVyUx2UxojR66Xjugye4HuQ==}
+  /@rmrk-team/evm-contracts@2.5.2:
+    resolution: {integrity: sha512-BztYZgqFer08KSPOH343AYG2MxLHgVX6TdGVws3fiiKk46cnO6vroUt0banPQYkatnH9XmVkL39HMVZymcpCEA==}
     engines: {node: '>=18'}
     dependencies:
       '@openzeppelin/contracts': 5.0.2
