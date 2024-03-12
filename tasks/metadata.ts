@@ -524,7 +524,7 @@ task(
     await generateMultipleFixedPartsMetadata(params.path, params.baseUri || '');
   });
 
-async function generateMultipleCollectionsMetadata(
+export async function generateMultipleCollectionsMetadata(
   path: string,
   externalUri: string,
   license: string,
@@ -551,7 +551,7 @@ async function generateMultipleCollectionsMetadata(
   console.log(`Processed ${total} collections.`);
 }
 
-async function generateMultipleTokenMetadata(
+export async function generateMultipleTokenMetadata(
   path: string,
   collectionSlug: string,
   externalUri: string,
@@ -581,7 +581,7 @@ async function generateMultipleTokenMetadata(
   console.log(`Processed ${total} tokens.`);
 }
 
-async function generateMultipleAssetMetadata(
+export async function generateMultipleAssetMetadata(
   path: string,
   collectionSlug: string,
   externalUri: string,
@@ -611,7 +611,10 @@ async function generateMultipleAssetMetadata(
   console.log(`Processed ${total} assets.`);
 }
 
-async function generateMultipleSlotPartsMetadata(path: string, baseUri: string): Promise<void> {
+export async function generateMultipleSlotPartsMetadata(
+  path: string,
+  baseUri: string,
+): Promise<void> {
   console.log('Reading slot metadata from', path);
   const parser = parse(fs.readFileSync(path, 'utf8'), { columns: true });
   let total = 0;
@@ -626,7 +629,10 @@ async function generateMultipleSlotPartsMetadata(path: string, baseUri: string):
   console.log(`Processed ${total} slots.`);
 }
 
-async function generateMultipleFixedPartsMetadata(path: string, baseUri: string): Promise<void> {
+export async function generateMultipleFixedPartsMetadata(
+  path: string,
+  baseUri: string,
+): Promise<void> {
   console.log('Reading fixed part metadata from', path);
   const parser = parse(fs.readFileSync(path, 'utf8'), { columns: true });
   let total = 0;

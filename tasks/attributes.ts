@@ -87,7 +87,7 @@ task(
 
 task(
   'attributes:set-multiple-attributes',
-  'Sets the same attribute for multiple tokens in the collection',
+  'Sets multiple attributes for the same token in the collection',
 )
   .addPositionalParam('collection', 'Address of the collection')
   .addPositionalParam('tokenId', 'TokenId', undefined, int)
