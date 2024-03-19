@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@rmrk-team/evm-contracts':
-    specifier: ^2.5.2
-    version: 2.5.2
+    specifier: ^2.5.3
+    version: 2.5.3
 
 devDependencies:
   '@nomicfoundation/hardhat-chai-matchers':
@@ -1004,8 +1004,8 @@ packages:
       squirrelly: 8.0.8
     dev: true
 
-  /@rmrk-team/evm-contracts@2.5.2:
-    resolution: {integrity: sha512-BztYZgqFer08KSPOH343AYG2MxLHgVX6TdGVws3fiiKk46cnO6vroUt0banPQYkatnH9XmVkL39HMVZymcpCEA==}
+  /@rmrk-team/evm-contracts@2.5.3:
+    resolution: {integrity: sha512-w3cBzcG6u5NhaBNGpb86uTqjRUuQh14KY8veqFAkIl6sHt9JyUZJVAzkih1H/MgA0A0lKVlhVxINnlAbHwE6LQ==}
     engines: {node: '>=18'}
     dependencies:
       '@openzeppelin/contracts': 5.0.2

@@ -45,7 +45,7 @@ task('attributes:set', 'Sets an attribute for a token in the collection')
   .addPositionalParam('tokenId', 'TokenId', undefined, int)
   .addPositionalParam(
     'type',
-    "Type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+    "Type of the attribute, options are: 'boolean', 'uint', 'int', 'string', 'address', 'bytes'.",
   )
   .addPositionalParam('attributesKey', 'Attribute Keys')
   .addPositionalParam('value', 'Value of the attribute, must be of the type specified.')
@@ -69,7 +69,7 @@ task(
   .addPositionalParam('tokenIds', 'Comma separated TokenIds. e.g: "1,2,3"')
   .addPositionalParam(
     'type',
-    "Type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+    "Type of the attribute, options are: 'boolean', 'uint', 'int', 'string', 'address', 'bytes'.",
   )
   .addPositionalParam('attributesKey', 'Attribute Keys')
   .addPositionalParam('value', 'Value of the attribute, must be of the type specified.')
@@ -93,7 +93,7 @@ task(
   .addPositionalParam('tokenId', 'TokenId', undefined, int)
   .addPositionalParam(
     'type',
-    "Type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+    "Type of the attribute, options are: 'boolean', 'uint', 'int', 'string', 'address', 'bytes'.",
   )
   .addPositionalParam('attributesKeys', 'Comma separated Attribute Keys. e.g: "key1,key2,key3"')
   .addPositionalParam('values', 'Comma separated values. e.g: "value1,value2,value3"')
@@ -117,7 +117,7 @@ task(
   .addPositionalParam('tokenIds', 'Comma separated TokenIds. e.g: "1,2,3"')
   .addPositionalParam(
     'type',
-    "Type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+    "Type of the attribute, options are: 'boolean', 'uint', 'int', 'string', 'address', 'bytes'.",
   )
   .addPositionalParam('attributesKeys', 'Comma separated Attribute Keys. e.g: "key1,key2,key3"')
   .addPositionalParam('values', 'Comma separated values. e.g: "value1,value2,value3"')
@@ -146,7 +146,7 @@ task('attributes:get', 'Gets attribute for a token in the collection')
   .addPositionalParam('tokenId', 'TokenId', undefined, int)
   .addPositionalParam(
     'type',
-    "Type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+    "Type of the attribute, options are: 'boolean', 'uint', 'int', 'string', 'address', 'bytes'.",
   )
   .addPositionalParam('attributesKey', 'Attribute Keys')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
@@ -166,7 +166,7 @@ task('attributes:get-multiple-tokens', 'Gets attribute for multiple tokens in th
   .addPositionalParam('tokenIds', 'Comma separated TokenIds. e.g: "1,2,3"')
   .addPositionalParam(
     'type',
-    "Type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+    "Type of the attribute, options are: 'boolean', 'uint', 'int', 'string', 'address', 'bytes'.",
   )
   .addPositionalParam('attributesKey', 'Attribute Keys')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
@@ -193,7 +193,7 @@ task('attributes:get-multiple-attributes', 'Gets multiple attribute for a token 
   .addPositionalParam('tokenId', 'TokenId', undefined, int)
   .addPositionalParam(
     'type',
-    "Type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+    "Type of the attribute, options are: 'boolean', 'uint', 'int', 'string', 'address', 'bytes'.",
   )
   .addPositionalParam('attributesKeys', 'Comma separated Attribute Keys. e.g: "key1,key2,key3"')
   .setAction(async (params, hre: HardhatRuntimeEnvironment) => {
@@ -223,7 +223,7 @@ task(
   .addPositionalParam('tokenIds', 'Comma separated TokenIds. e.g: "1,2,3"')
   .addPositionalParam(
     'type',
-    "Type of the attributes, must apply to all. Options are: 'boolean', 'int', 'string', 'address', 'bytes'.",
+    "Type of the attributes, must apply to all. Options are: 'boolean', 'uint', 'int', 'string', 'address', 'bytes'.",
   )
   .addPositionalParam('attributesKeys', 'Comma separated Attribute Keys. e.g: "key1,key2,key3"')
   .addParam(
@@ -303,8 +303,16 @@ export async function setAttribute(
         Boolean(value),
       );
       break;
-    case 'int':
+    case 'uint':
       tx = await tokenAttributes.setUintAttribute(
+        collection,
+        tokenId,
+        attributesKey,
+        parseInt(value),
+      );
+      break;
+    case 'int':
+      tx = await tokenAttributes.setIntAttribute(
         collection,
         tokenId,
         attributesKey,
@@ -342,8 +350,13 @@ export async function setAttributeForMultipleTokens(
         { key: attributesKey, value: Boolean(value) },
       ]);
       break;
-    case 'int':
+    case 'uint':
       tx = await tokenAttributes.setUintAttributes([collection], tokenIds, [
+        { key: attributesKey, value: parseInt(value) },
+      ]);
+      break;
+    case 'int':
+      tx = await tokenAttributes.setIntAttributes([collection], tokenIds, [
         { key: attributesKey, value: parseInt(value) },
       ]);
       break;
@@ -392,8 +405,17 @@ export async function setMultipleAttributeForToken(
         }),
       );
       break;
-    case 'int':
+    case 'uint':
       tx = await tokenAttributes.setUintAttributes(
+        [collection],
+        [tokenId],
+        attributesKeys.map((key, index) => {
+          return { key, value: parseInt(values[index]) };
+        }),
+      );
+      break;
+    case 'int':
+      tx = await tokenAttributes.setIntAttributes(
         [collection],
         [tokenId],
         attributesKeys.map((key, index) => {
@@ -465,8 +487,17 @@ export async function setMultipleAttributesForMultipleTokens(
         }),
       );
       break;
-    case 'int':
+    case 'uint':
       tx = await tokenAttributes.setUintAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys.map((key, index) => {
+          return { key, value: parseInt(values[index]) };
+        }),
+      );
+      break;
+    case 'int':
+      tx = await tokenAttributes.setIntAttributes(
         [collection],
         tokenIds,
         attributesKeys.map((key, index) => {
@@ -540,8 +571,11 @@ export async function getAttribute(
     case 'boolean':
       const boolValue = await tokenAttributes.getBoolAttribute(collection, tokenId, attributesKey);
       return boolValue;
+    case 'uint':
+      const uintValue = await tokenAttributes.getUintAttribute(collection, tokenId, attributesKey);
+      return uintValue;
     case 'int':
-      const intValue = await tokenAttributes.getUintAttribute(collection, tokenId, attributesKey);
+      const intValue = await tokenAttributes.getIntAttribute(collection, tokenId, attributesKey);
       return intValue;
     case 'string':
       const stringValue = await tokenAttributes.getStringAttribute(
@@ -588,8 +622,18 @@ export async function getAttributeForMultipleTokens(
           value: boolValues[index],
         };
       });
+    case 'uint':
+      const uintValues = await tokenAttributes.getUintAttributes([collection], tokenIds, [
+        attributesKey,
+      ]);
+      return tokenIds.map((id, index) => {
+        return {
+          tokenId: id,
+          value: uintValues[index],
+        };
+      });
     case 'int':
-      const intValues = await tokenAttributes.getUintAttributes([collection], tokenIds, [
+      const intValues = await tokenAttributes.getIntAttributes([collection], tokenIds, [
         attributesKey,
       ]);
       return tokenIds.map((id, index) => {
@@ -654,8 +698,20 @@ export async function getMultipleAttributesForToken(
           value: boolValues[index],
         };
       });
+    case 'uint':
+      const uintValues = await tokenAttributes.getUintAttributes(
+        [collection],
+        [tokenId],
+        attributesKeys,
+      );
+      return attributesKeys.map((key, index) => {
+        return {
+          key: key,
+          value: uintValues[index],
+        };
+      });
     case 'int':
-      const intValues = await tokenAttributes.getUintAttributes(
+      const intValues = await tokenAttributes.getIntAttributes(
         [collection],
         [tokenId],
         attributesKeys,
@@ -740,8 +796,21 @@ export async function getMultipleAttributesForMultipleTokens(
           value: boolValues[index],
         };
       });
+    case 'uint':
+      const uintValues = await tokenAttributes.getUintAttributes(
+        [collection],
+        tokenIds,
+        attributesKeys,
+      );
+      return attributesKeys.map((key, index) => {
+        return {
+          tokenId: tokenIds[index],
+          key: key,
+          value: uintValues[index],
+        };
+      });
     case 'int':
-      const intValues = await tokenAttributes.getUintAttributes(
+      const intValues = await tokenAttributes.getIntAttributes(
         [collection],
         tokenIds,
         attributesKeys,

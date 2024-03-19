@@ -98,7 +98,7 @@ Then, to set the attribute, you can call:
 pnpm hardhat attributes:set CONTRACT_ADDRESS TOKEN_ID TYPE ATTRIBUTE_NAME ATTRIBUTE_VALUE --network NETWORK
 ```
 
-Type is the type of the attribute, options are: 'boolean', 'int', 'string', 'address', 'bytes'. For example, to set the name of the token `15` on collection `0x5FbDB2315678afecb367f032d93F642f64180aa3` to be "My Token" you would call, in this case with the token holder account:
+Type is the type of the attribute, options are: 'boolean', 'uint', 'int', 'string', 'address', 'bytes'. For example, to set the name of the token `15` on collection `0x5FbDB2315678afecb367f032d93F642f64180aa3` to be "My Token" you would call, in this case with the token holder account:
 
 ```bash copy
 pnpm hardhat attributes:set 0x5FbDB2315678afecb367f032d93F642f64180aa3 15 string name 'My Token' --network sepolia

@@ -1,6 +1,6 @@
 {
   "name": "@rmrk-team/evm-template",
-  "version": "2.4.3",
+  "version": "2.5.3",
   "description": "Template for new projects using RMRK protocol on EVM",
   "scripts": {
     "test": "hardhat typechain && hardhat test",
@@ -18,7 +18,7 @@
   "author": "@rmrk-team",
   "license": "Apache-2.0",
   "dependencies": {
-    "@rmrk-team/evm-contracts": "^2.5.2"
+    "@rmrk-team/evm-contracts": "^2.5.3"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.3",
