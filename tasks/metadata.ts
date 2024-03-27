@@ -35,7 +35,7 @@ interface TokenOrAssetMetadata {
   mediaUri: string;
   image: string;
   externalUri?: string;
-  external_uri?: string;
+  external_url?: string;
   thumbnailUri?: string;
   animation_url?: string;
   license?: string;
@@ -713,7 +713,7 @@ function generateTokenMetadata(
   };
   if (externalUri) {
     metadata.externalUri = externalUri;
-    metadata.external_uri = externalUri;
+    metadata.external_url = externalUri;
   }
   if (thumbnailUri) metadata.thumbnailUri = thumbnailUri;
   if (animationUri) metadata.animation_url = animationUri;
@@ -763,7 +763,7 @@ function generateAssetMetadata(
   };
   if (externalUri) {
     metadata.externalUri = externalUri;
-    metadata.external_uri = externalUri;
+    metadata.external_url = externalUri;
   }
   if (thumbnailUri) metadata.thumbnailUri = thumbnailUri;
   if (animationUri) metadata.animation_url = animationUri;
