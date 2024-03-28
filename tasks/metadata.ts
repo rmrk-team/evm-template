@@ -14,7 +14,7 @@ const VALID_TYPES = ['number', 'float', 'integer', 'string', 'date', 'percentage
 interface CollectionMetadata {
   name: string;
   description: string;
-  mediaUri: string;
+  image: string;
   externalUri?: string;
   thumbnailUri?: string;
   license?: string;
@@ -664,7 +664,7 @@ function generateCollectionMetadata(
   const metadata: CollectionMetadata = {
     name,
     description,
-    mediaUri,
+    image: mediaUri,
   };
   if (externalUri) metadata.externalUri = externalUri;
   if (thumbnailUri) metadata.thumbnailUri = thumbnailUri;
@@ -734,7 +734,7 @@ function generateTokenMetadata(
     });
   }
 
-  fs.writeFileSync(`${dir}/${filename}'.json'`, JSON.stringify(metadata, null, 2));
+  fs.writeFileSync(`${dir}/${filename}.json`, JSON.stringify(metadata, null, 2));
 }
 
 function generateAssetMetadata(
