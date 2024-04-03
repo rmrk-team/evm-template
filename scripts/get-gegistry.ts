@@ -36,6 +36,9 @@ async function getRegistryAddress(): Promise<string> {
     // Astar
     case 592:
       return '0x96FB7Eb4419FccF7fD97Fc6E39Ee1f0541c12508';
+    // Astar ZK
+    case 3776:
+      return '0x139BC72C02D1141A651497f081f0763ADcfC6bA8';
     // BSC
     case 56:
       return '0x415aEcB40E26Cda3D3Db8b475F56198A994501ea';
