@@ -16,6 +16,7 @@ interface CollectionMetadata {
   description: string;
   image: string;
   externalUri?: string;
+  external_link?: string;
   thumbnailUri?: string;
   license?: string;
   licenseUri?: string;
@@ -666,7 +667,10 @@ function generateCollectionMetadata(
     description,
     image: mediaUri,
   };
-  if (externalUri) metadata.externalUri = externalUri;
+  if (externalUri) {
+    metadata.externalUri = externalUri;
+    metadata.external_link = externalUri;
+  }
   if (thumbnailUri) metadata.thumbnailUri = thumbnailUri;
   if (license) metadata.license = license;
   if (licenseUri) metadata.licenseUri = licenseUri;
