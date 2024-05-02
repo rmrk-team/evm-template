@@ -1,4 +1,4 @@
-import { string, int } from 'hardhat/internal/core/params/argumentTypes';
+import { string, int, boolean } from 'hardhat/internal/core/params/argumentTypes';
 import { task } from 'hardhat/config';
 import fs from 'fs';
 import { parse } from 'csv-parse';
@@ -42,6 +42,7 @@ interface TokenOrAssetMetadata {
   license?: string;
   licenseUri?: string;
   attributes?: Attribute[];
+  preferThumb?: boolean;
 }
 
 interface PartMetadata {
@@ -280,6 +281,13 @@ task('metadata:asset', 'Creates the metadata for an asset under the metadata/ass
   .addParam('license', 'A statement about the NFT license.', undefined, string, true)
   .addParam('licenseUri', 'A URI to a statement of license.', undefined, string, true)
   .addParam(
+    'preferThumb',
+    'Use thumbnail image where possible, except when equipping.',
+    false,
+    boolean,
+    true,
+  )
+  .addParam(
     'attributes',
     'Comma separated values in the form of "LABEL:TYPE:VALUE", e.g: "color:string:green". They are converted into an array of custom attributes about the subject or content of the asset.',
     undefined,
@@ -299,6 +307,7 @@ task('metadata:asset', 'Creates the metadata for an asset under the metadata/ass
       params.license,
       params.licenseUri,
       params.attributes,
+      params.preferThumb,
     );
   });
 
@@ -470,6 +479,13 @@ task(
   .addParam('license', 'A statement about the NFT license.', undefined, string, true)
   .addParam('licenseUri', 'A URI to a statement of license.', undefined, string, true)
   .addParam(
+    'preferThumb',
+    'Use thumbnail image where possible, except when equipping.',
+    false,
+    boolean,
+    true,
+  )
+  .addParam(
     'baseUri',
     'A URI to prepend to mediaUri, thumbnailUri and animationUri for every asset.',
     undefined,
@@ -484,6 +500,7 @@ task(
       params.license,
       params.licenseUri,
       params.baseUri || '',
+      params.preferThumb,
     );
   });
 
@@ -589,6 +606,7 @@ export async function generateMultipleAssetMetadata(
   license: string,
   licenseUri: string,
   baseUri: string,
+  preferThumb: boolean,
 ): Promise<void> {
   console.log('Reading asset metadata from', path);
   const parser = parse(fs.readFileSync(path, 'utf8'), { columns: true });
@@ -606,6 +624,7 @@ export async function generateMultipleAssetMetadata(
       license,
       licenseUri,
       record.attributes,
+      preferThumb,
     );
     total++;
   }
@@ -753,6 +772,7 @@ function generateAssetMetadata(
   license: string,
   licenseUri: string,
   attributes: string,
+  preferThumb: boolean,
 ): void {
   const dir = METADATA_DIR_FOR_ASSETS.replace(':collection-slug', collectionSlug);
   if (!fs.existsSync(dir)) {
@@ -773,6 +793,7 @@ function generateAssetMetadata(
   if (animationUri) metadata.animation_url = animationUri;
   if (license) metadata.license = license;
   if (licenseUri) metadata.licenseUri = licenseUri;
+  if (preferThumb) metadata.preferThumb = true;
   if (attributes) {
     metadata.attributes = attributes.split(',').map((attribute) => {
       const [label, type, value] = attribute.split(':');
