@@ -98,6 +98,16 @@ const config: HardhatUserConfig = {
       accounts: accounts,
       gasPrice: 3000000000,
     },
+    bob: {
+      url: 'https://rpc.gobob.xyz/',
+      chainId: 60808,
+      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    bobTest: {
+      url: 'https://testnet.rpc.gobob.xyz/',
+      chainId: 111,
+      accounts: accounts,
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
@@ -122,6 +132,8 @@ const config: HardhatUserConfig = {
       astar: process.env.ASTAR_BLOCKSCOUT_API_KEY || '', // Astar blockscout API Key
       astarZk: process.env.ASTAR_ZK_API_KEY || '', // Astar ZK API Key
       bsc: process.env.BSCSCAN_API_KEY || '', // BSC Etherscan API Key
+      bob: process.env.BOBSCAN_APIKEY || '', // Bob Testnet API Key
+      bobTest: process.env.BOBSCAN_APIKEY || '', // Bob Testnet API Key
     },
     customChains: [
       {
@@ -178,6 +190,22 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL: 'https://zkatana.blockscout.com/api',
           browserURL: 'https://zkatana.blockscout.com',
+        },
+      },
+      {
+        network: 'bob',
+        chainId: 60808,
+        urls: {
+          apiURL: 'https://explorer.gobob.xyz/api',
+          browserURL: 'https://explorer.gobob.xyz/',
+        },
+      },
+      {
+        network: 'bobTest',
+        chainId: 111,
+        urls: {
+          apiURL: 'https://testnet-explorer.gobob.xyz/api',
+          browserURL: 'https://testnet-explorer.gobob.xyz/',
         },
       },
     ],
