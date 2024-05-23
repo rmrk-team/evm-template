@@ -2,9 +2,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { RMRKEmotesRepository, RMRKTokenAttributesRepository } from '../typechain-types';
 
 const EMOTES_REPOSITORY_ADDRESS = '0x3110735f0b8e71455bae1356a33e428843bcb9a1';
-const TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT = '0x7E57110C7Ca7Ed1acf0be6220d8945fe09f461A4';
-const TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT_MOONBASE =
-  '0x4778B7e8088B258A447990e18AdB5fD14B1bD100';
+const TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT = '0x4778B7e8088B258A447990e18AdB5fD14B1bD100';
 const TOKEN_ATTRIBUTES_AVAILABLE_NETWORKS = [
   // Testing
   'baseSepolia',
@@ -36,8 +34,6 @@ export async function getAttributesRepository(
       `The network ${hre.network.name} is not supported by this task, please contact us through our telegram so we deploy the draft attributes repo on your network.`,
     );
   return (await hre.ethers.getContractFactory('RMRKTokenAttributesRepository')).attach(
-    hre.network.name === 'moonbaseAlpha'
-      ? TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT_MOONBASE
-      : TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT,
+    TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT,
   ) as RMRKTokenAttributesRepository;
 }
