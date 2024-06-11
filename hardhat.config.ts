@@ -1,5 +1,5 @@
 import { HardhatUserConfig } from 'hardhat/config';
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
 import '@nomicfoundation/hardhat-ethers';
 import '@nomicfoundation/hardhat-toolbox';
 import 'hardhat-contract-sizer';
@@ -7,6 +7,7 @@ import './tasks/emotes';
 import './tasks/attributes';
 import './tasks/metadata';
 
+dotenv.config();
 const accounts = process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [];
 
 const config: HardhatUserConfig = {
