@@ -42,6 +42,9 @@ async function getRegistryAddress(): Promise<string> {
     // BSC
     case 56:
       return '0x415aEcB40E26Cda3D3Db8b475F56198A994501ea';
+    // BOB
+    case 60808:
+      return '0x139BC72C02D1141A651497f081f0763ADcfC6bA8';
     default:
       throw new Error('Unexpected network!');
   }
