@@ -1,6 +1,6 @@
 import { ethers, run, network } from 'hardhat';
 import { SimpleEquippable } from '../typechain-types';
-import { getRegistry } from './get-gegistry';
+import { getRegistry } from './get-registry';
 import { delay, isHardhatNetwork } from './utils';
 
 async function main() {
@@ -34,7 +34,8 @@ async function deployContracts(): Promise<SimpleEquippable> {
         contract: 'contracts/SimpleEquippable.sol:SimpleEquippable',
       });
 
-      // Only do on testing, or if whitelisted for production
+      // Before deploying in production, contact RMRK to give permissions to your deployer address.
+      // If you skip this and mint items or add assets, adding it to singular later will be costly.
       const registry = await getRegistry();
       await registry.addExternalCollection(contractAddress, args[0]);
       console.log('Collection added to Singular Registry');
